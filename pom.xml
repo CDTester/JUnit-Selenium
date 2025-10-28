@@ -13,7 +13,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.36.0</selenium.version>
+        <selenium.version>4.38.0</selenium.version>
         <junit.version>6.0.0</junit.version>
         <groups>smoke | build</groups>
     </properties>

@@ -55,9 +55,9 @@ public class FormPage {
   }
 
   /**
-   * Highlights a web element (except radio and checkbox) and returns the webElement.
-   * @param element The WebElement to be highlighted.
-   * @return The same WebElement after highlighting.
+   * returns the Select class of the webElement.
+   * @param element The WebElement to initiate a Select class for.
+   * @return the Select Class of the webElement.
    * @throws InterruptedException If the thread is interrupted during sleep.
    */
   public Select getSelector(WebElement element) throws InterruptedException {

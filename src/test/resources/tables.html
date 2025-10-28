@@ -1,0 +1,125 @@
+<html>
+<head>
+    <title>Tables</title>
+    <style>
+        .tableBorder {
+            border: 1px solid black;
+        }
+        .tableHeader {
+            font-weight: bold;
+            background-color: lightgray;
+            border: 1px solid black;
+        }
+        .tableCell {
+            padding: 5px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<table id="base" class="tableBorder">
+    <tr>
+        <td class="tableCell">Hello</td>
+        <td class="tableCell">World</td>
+        <td class="tableCell">(Cheese!)</td>
+    </tr>
+</table>
+<br>
+
+<table class="tableBorder">
+    <tr id="hidden_text">
+        <td class="tableCell">some text
+            <div style="display: none;">some more text</div>
+        </td>
+    </tr>
+</table>
+<br>
+
+<table class="tableBorder">
+    <tr>
+        <th colspan="3" id="th1" class="tableHeader">Heading</th>
+    </tr>
+    <tr>
+        <td id="td1" class="tableCell">Data 1</td>
+        <td colspan="2" id="td2" class="tableCell">Data 2</td>
+    </tr>
+</table>
+<br>
+
+<table id="headerUnderTbody" class="tableBorder">
+    <tr>
+        <th class="tableHeader">Country</th>
+        <th class="tableHeader">Capital</th>
+        <th class="tableHeader">Continent</th>
+    </tr>
+    <tr>
+        <td class="tableCell">England</td>
+        <td class="tableCell">London</td>
+        <td class="tableCell">Europe</td>
+    </tr>
+    <tr>
+        <td class="tableCell">India</td>
+        <td class="tableCell">New Delhi</td>
+        <td class="tableCell">Asia</td>
+    </tr>
+</table>
+<br>
+
+<table id="headerUnderThead" class="tableBorder">
+    <thead>
+        <tr>
+            <th class="tableHeader">ID</th>
+            <th class="tableHeader">First Name</th>
+            <th class="tableHeader">Last Name</th>
+            <th class="tableHeader">Age</th>
+            <th class="tableHeader">City</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="tableCell">1</td>
+            <td class="tableCell">Jon</td>
+            <td class="tableCell">Snow</td>
+            <td class="tableCell">14</td>
+            <td class="tableCell">Castle Black</td>
+        </tr>
+        <tr>
+            <td class="tableCell">2</td>
+            <td class="tableCell">Arya</td>
+            <td class="tableCell">Stark</td>
+            <td class="tableCell">9</td>
+            <td class="tableCell">Winterfell</td>
+        </tr>
+        <tr>
+            <td class="tableCell">3</td>
+            <td class="tableCell">Tyrion</td>
+            <td class="tableCell">Lannister</td>
+            <td class="tableCell">25</td>
+            <td class="tableCell">Casterly Rock</td>
+        </tr>
+        <tr>
+            <td class="tableCell">4</td>
+            <td class="tableCell">Oberyn</td>
+            <td class="tableCell">Martell</td>
+            <td class="tableCell">42</td>
+            <td class="tableCell">Sunspear</td>
+        </tr>
+        <tr>
+            <td class="tableCell">5</td>
+            <td class="tableCell">Daenerys</td>
+            <td class="tableCell">Targaryen</td>
+            <td class="tableCell">16</td>
+            <td class="tableCell">Dragonstone</td>
+        </tr>
+        <tr>
+            <td class="tableCell">6</td>
+            <td class="tableCell">Brandon</td>
+            <td class="tableCell">Stark</td>
+            <td class="tableCell">8</td>
+            <td class="tableCell">Winterfell</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
