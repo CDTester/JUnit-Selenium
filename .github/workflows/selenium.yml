@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Build with Maven and run Selenium smoke tests
-        run: mvn clean install -Denv=dev -Dgroups=smoke
+        run: mvn clean install -Denv=prod -Dgroups=smoke
       - name: Archive test reports
         if: always()
         uses: actions/upload-artifact@v5

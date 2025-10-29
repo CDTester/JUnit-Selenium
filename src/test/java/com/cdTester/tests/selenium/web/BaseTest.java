@@ -6,10 +6,10 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import org.junit.jupiter.api.AfterEach;
-//import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -63,6 +63,9 @@ public class BaseTest {
     ChromeOptions options = new ChromeOptions();
     options.setImplicitWaitTimeout(Duration.ofSeconds(waitInSeconds));
     options.addArguments("disable-search-engine-choice-screen");
+    if (Objects.equals(ConfigReader.getEnv(), "prod")) {
+        options.addArguments("--headless=new");
+    }
     return startChromeDriver(options);
   }
 

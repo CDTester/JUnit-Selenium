@@ -35,6 +35,10 @@ public class ConfigReader {
    * getBaseUrl   gets the base URL address for the current environment
    * @return      String value of the base URL address
    */
+  public static String getEnv() {
+    return properties.getProperty("environment");
+  }
+
   public static String getBaseUrl() {
     return properties.getProperty("base.url");
   }
