@@ -118,8 +118,7 @@
                     <alwaysGenerateSurefireReport>true</alwaysGenerateSurefireReport>
                     <outputName>Selenium ${groups} Tests</outputName>
                     <reportsDirectories>
-                        <!--<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>-->
-                        <reportsDirectory>src/test/resources/reports/</reportsDirectory>
+                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     </reportsDirectories>
                 </configuration>
             </plugin>
