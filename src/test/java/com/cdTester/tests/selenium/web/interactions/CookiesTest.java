@@ -43,7 +43,7 @@ public class CookiesTest {
 
 
   @Test
-  @Tag("smoke")
+  @Tag("cookies")
   @Tag("regression")
   @DisplayName("Should be able to get all cookies")
   public void getAllCookies() {
