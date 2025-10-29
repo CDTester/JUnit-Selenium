@@ -16,7 +16,7 @@ public class CookiesTest {
   WebDriver driver = new ChromeDriver();
 
   @Test
-  @Tag("smoke")
+  @Tag("regression")
   @Tag("cookies")
   @DisplayName("Should be able to add a cookie")
   public void addCookie() {

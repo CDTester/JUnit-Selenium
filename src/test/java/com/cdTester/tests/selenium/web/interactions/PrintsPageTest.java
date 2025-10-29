@@ -28,7 +28,7 @@ public class PrintsPageTest extends BaseTest{
   }
 
   @Test
-  @Tag("smoke")
+  @Tag("regression")
   @Tag("printPage")
   @DisplayName("Should be able to print current page using PrintsPage interface")
   public void PrintWithPrintsPageTest() {

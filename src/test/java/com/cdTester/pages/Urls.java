@@ -12,7 +12,7 @@ public class Urls {
   public static String login = ConfigReader.getBaseUrl() + "selenium/web/login.html";
   public static String mouseInteraction = ConfigReader.getBaseUrl() + "selenium/web/mouse_interaction.html";
   public static String singleTextInput = ConfigReader.getBaseUrl() + "selenium/web/single_text_input.html";
-  public static String tables = System.getProperty("user.dir") + "/src/test/resources/tables.html";
+  public static String tables = "file://" + System.getProperty("user.dir") + "/src/test/resources/tables.html";
   public static String upload = "https://the-internet.herokuapp.com/upload";
   public static String windows = ConfigReader.getBaseUrl() + "selenium/web/window_switching_tests/page_with_frame.html";
 
