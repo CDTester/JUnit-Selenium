@@ -35,7 +35,7 @@ public class TablesTest extends BaseTest {
   }
 
   @Test
-  @Tag("smoke")
+  @Tag("regression")
   @DisplayName("Get column number by header name")
   void colNumberByHeader() throws InterruptedException {
     int colNumberTbody = tablesPage.getColumnNumberByHeader(tablesPage.countryTable, "Continent");
@@ -52,7 +52,7 @@ public class TablesTest extends BaseTest {
   }
 
   @Test
-  @Tag("smoke")
+  @Tag("regression")
   @DisplayName("Get row number by cell value")
   void rowNumberByCellValue() throws InterruptedException {
     int row1 = tablesPage.getRowNumberByCellValue(tablesPage.namesTable, "Stark", true);
