@@ -15,8 +15,9 @@ public class InformationTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.inputs);
+    driver.get(url.inputs);
     inputPage = new Inputs(driver);
   }
 

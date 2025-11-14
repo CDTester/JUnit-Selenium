@@ -17,8 +17,9 @@ public class KeysTest extends BaseTest {
 
   @BeforeEach
   void createSession() throws InterruptedException {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(0);
-    driver.get(Urls.singleTextInput);
+    driver.get(url.singleTextInput);
     keysPage = new SingleTextInput(driver);
     textInput = keysPage.highlightElement(keysPage.textInput);
   }

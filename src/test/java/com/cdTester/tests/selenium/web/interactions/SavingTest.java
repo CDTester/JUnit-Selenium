@@ -14,9 +14,12 @@ import java.util.Base64;
 
 
 public class SavingTest extends BaseTest {
+
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
+    driver.get(url.base);
   }
 
   @AfterEach
@@ -29,8 +32,6 @@ public class SavingTest extends BaseTest {
   @Tag("saving")
   @DisplayName("Should be able to save page as PDF")
   public void prints() throws IOException {
-    driver.get(Urls.base);
-
     String content = ((RemoteWebDriver) driver).print(new PrintOptions()).getContent();
     byte[] bytes = Base64.getDecoder().decode(content);
     Files.write(Paths.get("selenium.pdf"), bytes);

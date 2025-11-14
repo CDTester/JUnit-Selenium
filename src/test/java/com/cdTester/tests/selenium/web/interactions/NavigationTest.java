@@ -8,10 +8,12 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NavigationTest extends BaseTest{
+  protected Urls url;
 
   @BeforeEach
   public void createSession() {
     driver = startChromeDriver(1);
+    url = new Urls(BaseTest.config, "selenium");
   }
 
   @AfterEach
@@ -25,7 +27,7 @@ public class NavigationTest extends BaseTest{
   @DisplayName("Should be able to navigate to a URL using the driver.get() method")
   public void navigateBrowserGet() {
     //Convenient
-    driver.get(Urls.base);
+    driver.get(url.base);
     assertEquals("Selenium", driver.getTitle());
   }
 
@@ -35,7 +37,7 @@ public class NavigationTest extends BaseTest{
   @DisplayName("Should be able to navigate to a URL using the navigate().to() method")
   public void navigateBrowserTo() {
     //Longer way
-    driver.navigate().to(Urls.base);
+    driver.navigate().to(url.base);
     assertEquals("Selenium", driver.getTitle());
   }
 
@@ -44,7 +46,7 @@ public class NavigationTest extends BaseTest{
   @Tag("navigation")
   @DisplayName("Should be able to navigate back")
   public void navigateBrowserBack() {
-    driver.get(Urls.base);
+    driver.get(url.base);
     assertEquals("Selenium", driver.getTitle());
 
     Menu menu = new Menu(driver);
@@ -61,7 +63,7 @@ public class NavigationTest extends BaseTest{
   @Tag("navigation")
   @DisplayName("Should be able to navigate forward")
   public void navigateBrowserForward () {
-    driver.get(Urls.base);
+    driver.get(url.base);
     assertEquals("Selenium", driver.getTitle());
 
     Menu menu = new Menu(driver);
@@ -82,7 +84,7 @@ public class NavigationTest extends BaseTest{
   @Tag("navigation")
   @DisplayName("Should be able to get text from alert and accept it")
   public void navigateBrowserRefresh() {
-    driver.get(Urls.base);
+    driver.get(url.base);
     assertEquals("Selenium", driver.getTitle());
 
     //Refresh

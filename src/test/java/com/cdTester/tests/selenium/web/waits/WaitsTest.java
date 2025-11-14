@@ -20,6 +20,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class WaitsTest extends BaseTest {
   protected Dynamic dynamicPage;
+  protected Urls url;
+
+  @BeforeEach
+  public void loadUrls() {
+    Urls url = new Urls(BaseTest.config, "selenium");
+  }
 
   @AfterEach
   public void endSession() {
@@ -32,7 +38,7 @@ public class WaitsTest extends BaseTest {
   @DisplayName("Should fail to find box without waits")
   public void noWaits() throws InterruptedException {
     driver = startChromeDriver(0);
-    driver.get(Urls.dynamic);
+    driver.get(url.dynamic);
     dynamicPage = new Dynamic(driver);
 
     WebElement addButton = dynamicPage.highlightElement(dynamicPage.addAboxButton);
@@ -51,7 +57,7 @@ public class WaitsTest extends BaseTest {
   @DisplayName("Should be able to find box using implicit wait")
   public void implicit() throws InterruptedException {
     driver = startChromeDriver(2);
-    driver.get(Urls.dynamic);
+    driver.get(url.dynamic);
     dynamicPage = new Dynamic(driver);
 
     WebElement addButton = dynamicPage.highlightElement(dynamicPage.addAboxButton);
@@ -67,7 +73,7 @@ public class WaitsTest extends BaseTest {
   @DisplayName("Should be able to find box using explicit wait")
   public void explicit() throws InterruptedException {
     driver = startChromeDriver(0);
-    driver.get(Urls.dynamic);
+    driver.get(url.dynamic);
     dynamicPage = new Dynamic(driver);
 
     WebElement revealButton = dynamicPage.highlightElement(dynamicPage.revealNewInputButton);
@@ -88,7 +94,7 @@ public class WaitsTest extends BaseTest {
   @DisplayName("Should be able to find box using sleep")
   public void sleep() throws InterruptedException {
     driver = startChromeDriver(0);
-    driver.get(Urls.dynamic);
+    driver.get(url.dynamic);
     dynamicPage = new Dynamic(driver);
 
     WebElement addButton = dynamicPage.highlightElement(dynamicPage.addAboxButton);
@@ -106,7 +112,7 @@ public class WaitsTest extends BaseTest {
   @DisplayName("Should be able to find box using explicit wait with polling option")
   public void explicitWithOptions() throws InterruptedException {
     driver = startChromeDriver(0);
-    driver.get(Urls.dynamic);
+    driver.get(url.dynamic);
     dynamicPage = new Dynamic(driver);
 
     WebElement revealButton = dynamicPage.highlightElement(dynamicPage.revealNewInputButton);

@@ -13,8 +13,9 @@ public class WindowsTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.windows);
+    driver.get(url.windows);
     windowPage = new Windows(driver);
   }
 

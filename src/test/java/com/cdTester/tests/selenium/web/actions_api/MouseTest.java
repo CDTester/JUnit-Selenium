@@ -25,8 +25,9 @@ public class MouseTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(0);
-    driver.get(Urls.mouseInteraction);
+    driver.get(url.mouseInteraction);
     mousePage = new MouseInteraction(driver);
   }
 

@@ -13,8 +13,9 @@ public class InteractionTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(2);
-    driver.get(Urls.inputs);
+    driver.get(url.inputs);
     inputPage = new Inputs(driver);
   }
 

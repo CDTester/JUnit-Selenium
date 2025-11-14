@@ -7,9 +7,7 @@ import com.cdTester.pages.Urls;
 import com.cdTester.tests.selenium.web.BaseTest;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FramesTest extends BaseTest {
@@ -17,8 +15,9 @@ public class FramesTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.frames);
+    driver.get(url.frames);
     framesPage = new Frames(driver);
 //    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
   }

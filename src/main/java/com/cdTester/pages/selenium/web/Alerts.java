@@ -1,14 +1,13 @@
 package com.cdTester.pages.selenium.web;
 
+import com.cdTester.utils.Highlight;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 
-import static com.cdTester.utils.Highlight.*;
 
 public class Alerts {
   public WebDriver driver;
@@ -49,7 +48,7 @@ public class Alerts {
   }
 
   public void click(WebElement element) throws InterruptedException {
-    highlightElement(this.driver, element);
+    Highlight.highlightElement(this.driver, element);
     element.click();
     this.wait.until(ExpectedConditions.alertIsPresent());
   }

@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 public class TablesPage {
   public WebDriver driver;
 
-  @FindBy(id = "base")
+  @FindBy(id = "baseOld")
   public WebElement baseTable;
 
   @FindBy(xpath = "//table[2]")

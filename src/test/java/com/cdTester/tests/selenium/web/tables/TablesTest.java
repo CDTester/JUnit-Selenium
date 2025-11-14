@@ -14,8 +14,9 @@ public class TablesTest extends BaseTest {
 
   @BeforeEach
   void createSession() throws InterruptedException {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(0);
-    driver.get(Urls.tables);
+    driver.get(url.tables);
     tablesPage = new TablesPage(driver);
   }
 

@@ -16,8 +16,9 @@ public class SelectListTest extends BaseTest {
 
   @BeforeEach
   public void navigate() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.formPage);
+    driver.get(url.formPage);
     formsPage = new FormPage(driver);
   }
 

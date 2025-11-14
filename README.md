@@ -1,4 +1,4 @@
-# SELENIUM
+# Selenium UI Framework on JUnit framework
 
 ## Installation
 Add Selenium to your [POM file](pom.xml) 
@@ -13,33 +13,123 @@ Using the Page Object Model (POM) design pattern, the folder structure is as fol
 src
  ├─ main
  │  ├─ java
- │  └─ resources
+ │     └─ com.cdTester
+ │        ├─ pages
+ │        │  ├─ selenium.web
+ │        │  │  ├─ Alerts.java  # POM class for Alerts page
+ │        │  │  ├─ Login.java   # POM class for Login page
+ │        │  │  └─ ...
+ │        │  └─ Urls.java       # Class for storing URLs of the selenium web pages
+ │        └─ Utils.java        # Utility class for common functions
+ │          └─ configReader.java  # Class for reading configuration properties
  ├─ test
  │  ├─ java
  │  │  └─ com.cdTester
- │  │     ├─ pages
- │  │     │  ├─ selenium.web
- │  │     │  │  ├─ Alerts.java  # POM class for Alerts page
- │  │     │  │  ├─ Login.java   # POM class for Login page
- │  │     │  │  └─ ...
- │  │     │  └─ Urls.java       # Class for storing URLs of the selenium web pages
- │  │     ├─ tests
- │  │     │  └─ selenium.web
- │  │     │     ├─ BaseTest.java  # Base test class for setup and teardown
- │  │     │     ├─ interactions  # Folder for interaction tests (click, sendKeys, etc.)
- │  │     │     │  ├─ AlertsTest.java
- │  │     │     │  ├─ CookiesTest.java
- │  │     │     │  └─ ...
- │  │     │     └─ elements  # Folder for page object classes
- │  │     └─ Utils.java        # Utility class for common functions
- │  │       └─ configReader.java  # Class for reading configuration properties
+ │  │     └─ tests
+ │  │        └─ selenium.web
+ │  │           ├─ BaseTest.java  # Base test class for setup and teardown
+ │  │           ├─ interactions  # Folder for interaction tests (click, sendKeys, etc.)
+ │  │           │  ├─ AlertsTest.java
+ │  │           │  ├─ CookiesTest.java
+ │  │           │  └─ ...
+ │  │           └─ elements  # Folder for page object classes
  │  └─ resources
  │    ├─ testdata.csv  # Test data file for storing test data
  │    └─ config
  │       └─ dev.properties  # Configuration file for environment variables
 ```
 
-## import drivers
+## JUnit
+As a test framework, JUnit is more of a developers test framework and not a testers framework. It lacks tha ability to define tests steps, 
+tests are contained in methods. The test report only shows the status of each method. It does not effectively communicate to the audience
+what the tests are actually doing and does not provide any test evidence.
+
+### Annotations
+| Annotation         | Description                                                                     | Paramaters                             |
+|--------------------|---------------------------------------------------------------------------------|----------------------------------------|
+| @BeforeAll         | The annotated method will be run before all @Test methods.                      |                                        |
+| @BeforeEach        | The annotated method will be run before each @Test methods.                     |                                        |
+| @AfterEach         | The annotated method will be run after each @Test methods.                      |                                        |
+| @AfterAll          | The annotated method will be run after all the @Test methods.                   |                                        |
+| @Test              | The annotation declares a class/method as a test.                               |                                        |
+| @DisplayName       | Declares a custom display name for the test class/method.                       | ("Test Name")                          |
+| @Tag               | Adds a tag to a test which can be used to filter tests during execution cycles. | ("Tag Name")                           |
+| @Disabled          | This annotation declares the class/method as a parameterised test               |                                        |
+| @ParameterizedTest | Marks a method as supplying data for a test method.                             |                                        |
+| @valueSource       | Specifies a String array as the source of arguments for the @ParameterizedTest  | (strings = { "value1", "value2" })     |
+| @csvSource         | Specifies an csv list as the source of arguments for the @ParameterizedTest     | ( {"fruit, apple", "vegetable, pea"} ) |
+
+
+### Running Tests with Maven
+To run tests with Maven, use the following command to run all tests:
+```bash
+mvn clean test -Denv=dev
+```
+Or to run tests with a specific tag
+```bash
+mvn clean test -Denv=dev -Dgroups=smoke
+```
+
+To run a specific test class, use the following command:
+```bash
+mvn  -Denv=dev -Dtest="com.cdTester.tests.selenium.web.interactions"
+```
+
+To run tests on installation:
+```bash
+mvn clean install -Denv=dev
+```
+
+### Run Configurations
+These tests use a configReader to read environment variables from a properties file.
+To run Junit tests from the IntelliJ IDE, we need a VM option in JUnit run configuration.
+In the navigation menu, go to Run > Edit Configurations.
+- Click on "Edit configuration templates" and select "JUnit".
+- Set the following fields: VM options: -Denv=dev
+- Apply the changes and close the dialog.
+- Click on the "+" icon to add a new configuration and select "JUnit". Set up a config like this:
+
+![JUnit Run Configuration](docs/junit_run_config.png)
+
+
+
+
+## Configuration Management
+The ConfigManager class is used to read configuration values from property files based on the environment specified. 
+The environment is set using the 'env' system property, which can be passed as a VM option when running the tests.
+
+The following example only contains one set of configuration for 'users' in the 'dev' environment. 
+dev.properties
+```
+# default properties
+environment=dev
+browser=chrome
+
+# Selenium
+selenium.base.url=https://www.selenium.dev/
+selenium.username=admin
+selenium.password=myStrongPassword
+
+# the-internet-herokuapp
+herokuapp.base.url=https://the-internet.herokuapp.com/
+
+# tables
+tables.base.url=file://
+```
+
+## Maven Surefire Test Reporter 
+The Maven Surefire report collates data the JUnit xml test report file. The report is basic and only shows the summary of the results and test titles.
+
+![Surefire report](docs/surefire_report.png)
+
+## Allure Test Reporter
+The Allure Reporter is a rich report that provides functionality for test steps. 
+
+The next step for this repo is to add Allure reporter.
+
+
+## Selenium 
+### import drivers
 Selenium supports multiple browsers. You need to import the driver for the browser you want to use.:
 ```java
 import org.openqa.selenium.WebDriver;
@@ -49,7 +139,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.safari.SafariDriver;
 ```
 
-## Driver Options
+### Driver Options
 You can set options for the driver. For example, to start Chrome in headless mode:
 ```java
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -79,7 +169,7 @@ SafariOptions optionsSafari = new SafariOptions()
         .setUseTechnologyPreview(true);
 ```
 
-## Start a driver
+### Start a driver
 Create a new Driver class object with:
 ```java
 WebDriver chrome = new ChromeDriver(optionsChrome);
@@ -88,7 +178,7 @@ WebDriver edge = new EdgeDriver(optionsEdge);
 WebDriver safari = new SafariDriver(optionsSafari);
 ```
 
-## Navigate to a URL
+### Navigate to a URL
 Use the `get()` or `navigate()` method to navigate to a URL:
 ```java
 WebDriver chrome = chrome.get("https://www.google.co.uk");
@@ -98,7 +188,7 @@ WebDriver chrome = chrome.navigate().back();
 WebDriver chrome = chrome.navigate().forward();
 ```
 
-## Manage the browser window
+### Manage the browser window
 You can manage the browser window with the `manage().window()` method:
 ```java
 WebDriver chrome = chrome.manage().window().maximize();
@@ -135,14 +225,14 @@ WebDriver openNewTab = chrome.switchTo().newWindow(WindowType.TAB);
 WebDriver openNewWindow = chrome.switchTo().newWindow(WindowType.WINDOW);
 ```
 
-## Browser Title
+### Browser Title
 You can get the browser title with the `getTitle()` method:
 ```java
 WebDriver chrome = new ChromeDriver();
 String title = chrome.getTitle();
 ```
 
-## Find Elements
+### Find Elements
 You can find elements on the page with the `findElement()` and `findElements()` methods:
 ```java
 import org.openqa.selenium.By;
@@ -167,7 +257,7 @@ By cancelLocator = RelativeLocator.with(By.tagName("button")).toLeftOf(By.id("su
 By submitLocator = RelativeLocator.with(By.tagName("button")).toRightOf(By.id("cancel"));
 By emailLocator = RelativeLocator.with(By.tagName("input")).near(By.id("lbl-email"));
 ```
-## Interact with elements
+### Interact with elements
 You can interact with elements using methods like `click()`, `sendKeys()`, and `clear()`:
 ```java
 import org.openqa.selenium.By;
@@ -181,7 +271,7 @@ List<WebElement> elements = chrome.findElements(By.tagName("input"))
                 .clear();
 ```
 
-## Actions
+### Actions
 You can perform complex actions using the `Actions` class:
 
 ```java
@@ -208,7 +298,7 @@ Actions a = new Actions(driver).moveToElement(clickable).perform();
 ```
 
 
-## Information about elements
+### Information about elements
 You can get information about elements using methods like `getText()`, `getAttribute()`,
 ```java
 import org.openqa.selenium.By;
@@ -228,9 +318,9 @@ List<WebElement> elements = chrome.findElements(By.tagName("input"))
         .getRect();
 ```
 
-# Waits
+### Waits
 You can use waits to wait for elements to be in a certain state before interacting with them. There are two types of waits: implicit and explicit.
-## Implicit Wait
+#### Implicit Wait
 You can set an implicit wait with the `manage().timeouts().implicitlyWait()` method:
 This is global setting that applies to all elements throughout the driver session. The default setting is 0.
 ```java
@@ -239,7 +329,7 @@ import java.time.Duration;
 WebDriver driver = driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
 ```
 
-## Explicit Wait
+#### Explicit Wait
 You can set an explicit wait with the `WebDriverWait` class and `ExpectedConditions`:
 This is a one-off wait that you can use for a specific element.
 ```java
@@ -252,8 +342,7 @@ Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5))
 ```
 
 
-
-## Screenshots
+### Screenshots
 You can take screenshots with the `getScreenshotAs()` method:
 ```java
 import org.openqa.selenium.TakesScreenshot;
@@ -268,7 +357,7 @@ File destFile = new File("screenshots/" + fileName + ".png");
 see more examples:
 </br>[BaseTest](src/test/java/com/cdTester/tests/selenium/web/BaseTest.java)
 
-## Manage cookies
+### Manage cookies
 You can manage cookies with the `manage().cookies()` method:
 ```java
 import org.openqa.selenium.Cookie;
@@ -281,7 +370,7 @@ Cookie getNamed = chrome.manage().getCookieNamed("testCookie");
 see more examples [CookiesTest](src/test/java/com/cdTester/tests/selenium/web/interactions/CookiesTest.java).
 
 
-## Alerts
+### Alerts
 You can handle alerts with the `switchTo().alert()` method:
 ```java
 //WebElement alert = chrome.findElement(By.id("alert")).click();
@@ -293,7 +382,7 @@ String text = alert.getText();
 //alert.sendKeys("test");
 ```
 
-## Frames
+### Frames
 You can switch to a frame with the `switchTo().frame()` method:
 ```java
 WebDriver chrome = chrome.switchTo().frame("frameName");
@@ -302,7 +391,7 @@ WebDriver chrome = chrome.switchTo().frame(chrome.findElement(By.tagName("iframe
 WebDriver chrome = chrome.switchTo().defaultContent();
 ```
 
-## Quitting Session
+### Quitting Session
 You can quit the browser session with the `quit()` method:
 ```java
 WebDriver chrome = chrome.quit();
@@ -316,137 +405,7 @@ Quit will:
 Failure to call quit will leave extra background processes and ports running on your machine which could cause you problems later.
 Some test frameworks offer methods and annotations which you can hook into to tear down at the end of a test.
 
-## JUnit 5 Annotations
-You can use JUnit 5 annotations to:
-* set up your tests (`@Before`, `@BeforeEach`, `@BeforeAll`)
-* tear down your tests (`@After`, `@AfterEach`, `@AfterAll`)
-
-```java
-import org.junit.jupiter.api.*;
-
-@BeforeEach
-public void createSession() {
-  driver = startChromeDriver(1);
-  driver.get(Urls.formPage);
-  formsPage = new FormPage(driver);
-}
-
-@AfterEach
-public void endSession() {
-  driver.quit();
-}
-```
-
-Tests can be annotated using:
-* `@Test` 
-* `@ParameterizedTest` along with `@ValueSource`, `@CsvSource`, `@MethodSource`, or `@CsvFileSource`
-
-To give tests a clearer description use `@DisplayName`
-
-To make it easier to group and filter tests, you can use `@Tag`
-
-```java
-@Test
-@Tag("smoke")
-@Tag("selectList")
-@DisplayName("Should be able to select options from a single select list")
-public void selectOption() throws InterruptedException {
-  // code...
-}
-
-@DisplayName("Should have current URL of :")
-@ParameterizedTest(name = "{0}")
-@ValueSource(strings = { "https://www.selenium.dev/", "https://docs.junit.org/current/user-guide/" })
-@Tag("driver")
-@Tag("smoke")
-public void getCurrentUrl(String UrlParam, TestReporter testReporter) {
-  // Code
-}
-
-```
 
 
-## Running selenium tests
-### POM file
-To run 'maven-surefire-reports' add the following to your POM file.
-```xml
-<properties>
-    <groups>smoke | build</groups>
-</properties>
-
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.4</version>
-            <configuration>
-                <groups>${groups}</groups>
-                <statelessTestsetReporter
-                        implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
-                    <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
-                </statelessTestsetReporter>
-                <properties>
-                    <configurationParameters>
-                        junit.platform.reporting.open.xml.enabled = true
-                        junit.platform.reporting.output.dir = target/surefire-reports
-                    </configurationParameters>
-                </properties>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>3.5.3</version>
-            <executions>
-                <execution>
-                    <phase>test</phase>
-                    <goals>
-                        <goal>report</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <showSuccess>true</showSuccess>
-                <alwaysGenerateSurefireReport>true</alwaysGenerateSurefireReport>
-                <outputName>Selenium ${groups} Tests</outputName>
-                <reportsDirectories>
-                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                </reportsDirectories>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
-
-## Run Configurations
-These tests use a configReader to read environment variables from a properties file.
-To run Junit tests from your class, we need a VM option in JUnit run configuration.
-In the navigation menu, go to Run > Edit Configurations.
-- Click on "Edit configuration templates" and select "JUnit".
-- Set the following fields: VM options: -Denv=dev
-- Apply the changes and close the dialog.
-- Click on the "+" icon to add a new configuration and select "JUnit". Set up a config like this:
-
-![JUnit Run Configuration](docs/junit_run_config.png)
 
 
-### Running Tests with Maven
-To run tests with Maven, use the following command to run all tests:
-```bash
-mvn clean test -Denv=dev
-```
-Or to run tests with a specific tag
-```bash
-mvn clean test -Denv=dev -Dgroups=smoke
-```
-
-To run a specific test class, use the following command:
-```bash
-mvn  -Denv=dev -Dtest="com.cdTester.tests.selenium.web.interactions"
-```
-
-To run tests on installation:
-```bash
-mvn clean install -Denv=dev
-```

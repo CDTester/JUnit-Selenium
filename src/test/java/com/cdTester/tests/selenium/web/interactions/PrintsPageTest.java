@@ -13,13 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PrintsPageTest extends BaseTest{
-
+  protected Urls url;
   @BeforeEach
   public void setup() {
     String[] args = {};
     HashMap<String, Object> capabilities = new HashMap<String, Object>();
     capabilities.put("webSocketUrl", true);
     driver = startChromeDriver(1, args, capabilities);
+    url = new Urls(BaseTest.config, "selenium");
+
   }
 
   @AfterEach
@@ -32,7 +34,7 @@ public class PrintsPageTest extends BaseTest{
   @Tag("printPage")
   @DisplayName("Should be able to print current page using PrintsPage interface")
   public void PrintWithPrintsPageTest() {
-    driver.get(Urls.base);
+    driver.get(url.base);
     PrintsPage printer = (PrintsPage) driver;
     PrintOptions printOptions = new PrintOptions();
     Pdf printedPage = printer.print(printOptions);
@@ -46,7 +48,7 @@ public class PrintsPageTest extends BaseTest{
   @DisplayName("Should be able to print current page using BrowsingContext interface")
   public void PrintWithBrowsingContextTest() {
     BrowsingContext browsingContext = new BrowsingContext(driver, driver.getWindowHandle());
-    driver.get(Urls.formPage);
+    driver.get(url.formPage);
     PrintOptions printOptions = new PrintOptions();
     String printPage = browsingContext.print(printOptions);
     assertTrue(printPage.length() > 0);

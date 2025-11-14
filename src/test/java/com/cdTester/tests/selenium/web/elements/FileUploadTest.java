@@ -17,8 +17,9 @@ public class FileUploadTest extends BaseTest {
   @Tag("regression")
   @DisplayName("Should be able to Upload a fileName")
   public void fileUploadTest() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.upload);
+    driver.get(url.upload);
     Upload uploadPage = new Upload(driver);
 
     /* The following is replaced by Page Object Model

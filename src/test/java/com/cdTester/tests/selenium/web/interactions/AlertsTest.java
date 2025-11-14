@@ -4,7 +4,6 @@ import com.cdTester.pages.selenium.web.Alerts;
 import com.cdTester.pages.Urls;
 import com.cdTester.tests.selenium.web.BaseTest;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,8 +13,9 @@ public class AlertsTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.alerts);
+    driver.get(url.alerts);
     alertsPage = new Alerts(driver);
   }
 

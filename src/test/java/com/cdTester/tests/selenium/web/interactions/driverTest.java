@@ -1,5 +1,6 @@
 package com.cdTester.tests.selenium.web.interactions;
 
+import com.cdTester.pages.Urls;
 import com.cdTester.tests.selenium.web.BaseTest;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,7 +8,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 
 public class driverTest extends BaseTest {
-  private final String URL = "https://www.selenium.dev/";
+  Urls url = new Urls(BaseTest.config, "selenium");
+  protected final String URL = url.base;
+
 
   @BeforeEach
   public void createSession() {

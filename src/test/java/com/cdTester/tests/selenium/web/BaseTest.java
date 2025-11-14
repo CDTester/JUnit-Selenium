@@ -6,10 +6,10 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
+import com.cdTester.utils.ConfigManager;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,20 +21,25 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.io.FileHandler;
 
-import com.cdTester.utils.ConfigReader;
 
 public class BaseTest {
   protected WebDriver driver;
   protected WebDriverWait wait;
-  protected String username = (ConfigReader.getUsername() != null) ? ConfigReader.getUsername() : "baseUser";
-  protected String password = (ConfigReader.getPassword() != null) ? ConfigReader.getPassword() : "basePassword";
-  protected String browser = (ConfigReader.getBrowser() != null) ? ConfigReader.getBrowser() : "chrome";
+  protected static String browser;
   protected String trustStorePassword = "seleniumkeystore";
+  protected static ConfigManager config;
 
-//  public WebElement getLocatedElement(WebDriver driver, By by) {
-//    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-//    return wait.until(d -> driver.findElement(by));
-//  }
+  @BeforeAll
+  protected static void setUpSuite() {
+    System.out.println("BeforeSuite executed");
+    // No ITestContext parameter - just basic setup
+    File outputDir = new File("test-output");
+    if (!outputDir.exists()) {
+      outputDir.mkdirs();
+    }
+    config = ConfigManager.getInstance();
+    browser = (config.getBrowser() != null) ? config.getBrowser() : "chrome";
+  }
 
   protected WebDriver startBrowserDriver() {
     if (browser.equalsIgnoreCase("firefox")) {
@@ -63,7 +68,7 @@ public class BaseTest {
     ChromeOptions options = new ChromeOptions();
     options.setImplicitWaitTimeout(Duration.ofSeconds(waitInSeconds));
     options.addArguments("disable-search-engine-choice-screen");
-    if (Objects.equals(ConfigReader.getEnv(), "prod")) {
+    if (config.getEnv().equals("prod")) {
         options.addArguments("--headless=new");
     }
     return startChromeDriver(options);

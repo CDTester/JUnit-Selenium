@@ -16,8 +16,9 @@ public class LoginTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.login);
+    driver.get(url.login);
     loginPage = new Login(driver);
     wait = new WebDriverWait(driver, Duration.ofSeconds(10));
   }
@@ -48,6 +49,8 @@ public class LoginTest extends BaseTest {
   @Tag("regression")
   @DisplayName("Should get an error message when logging in with invalid credentials")
   public void invalidLogin() {
+    String username = config.getProperty("selenium.username");
+    String password = config.getProperty("selenium.password");
     System.out.println("username: " + username);
     System.out.println("password: " + password);
     loginPage.login(username, password);

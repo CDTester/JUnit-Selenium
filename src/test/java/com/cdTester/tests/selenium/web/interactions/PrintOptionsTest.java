@@ -22,8 +22,9 @@ public class PrintOptionsTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
+    Urls url = new Urls(BaseTest.config, "selenium");
     driver = startChromeDriver(1);
-    driver.get(Urls.base);
+    driver.get(url.base);
   }
 
   @AfterEach

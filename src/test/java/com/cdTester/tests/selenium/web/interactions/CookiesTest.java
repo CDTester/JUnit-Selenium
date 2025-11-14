@@ -1,5 +1,7 @@
 package com.cdTester.tests.selenium.web.interactions;
 
+import com.cdTester.pages.Urls;
+import com.cdTester.tests.selenium.web.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -8,11 +10,11 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.Set;
-import com.cdTester.utils.ConfigReader;
 
 
-public class CookiesTest {
-  protected String URL = ConfigReader.getBaseUrl() + "selenium/web/blank.html";
+public class CookiesTest extends BaseTest{
+  protected Urls url = new Urls(BaseTest.config, "selenium");
+  protected String URL = url.base + "selenium/web/blank.html";
   WebDriver driver = new ChromeDriver();
 
   @Test
