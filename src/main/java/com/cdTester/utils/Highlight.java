@@ -13,7 +13,7 @@ public class Highlight {
    * @throws InterruptedException If the thread is interrupted while sleeping (default 500ms).
    */
   public static void highlightElement(WebDriver driver, WebElement element) throws InterruptedException {
-    highlightElement(driver, element, 5000);
+    highlightElement(driver, element, 1000);
   }
 
   /**

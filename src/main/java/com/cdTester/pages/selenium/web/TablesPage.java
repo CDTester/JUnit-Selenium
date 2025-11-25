@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 public class TablesPage {
   public WebDriver driver;
 
-  @FindBy(id = "baseOld")
+  @FindBy(id = "base")
   public WebElement baseTable;
 
   @FindBy(xpath = "//table[2]")
@@ -41,14 +41,6 @@ public class TablesPage {
   @FindBy(id = "headerUnderThead")
   public WebElement namesTable;
 
-  /*
-  @FindBy(css = "option[value=one]")
-  public WebElement nonMultiOptionOne;
-  @FindBy(css = "option[value=four]")
-  public WebElement nonMultiOptionFour;
-  @FindBy(xpath = "//option[@value='still learning how to count, apparently']")
-  public WebElement nonMultiOptionStillLearning;
-*/
 
   public TablesPage(WebDriver driver) {
     this.driver = driver;
@@ -65,7 +57,13 @@ public class TablesPage {
    * @throws InterruptedException If the thread is interrupted during sleep.
    */
   public WebElement getCellByRowAndColumn(WebElement table, int row, int column) throws NoSuchElementException, InterruptedException {
-    return highlightElement(table.findElement(By.xpath(".//tbody/tr[" + row + "]/td[" + column + "]")));
+    try {
+      WebElement element = table.findElement(By.xpath(".//tbody/tr[" + row + "]/td[" + column + "]"));
+      return highlightElement(element);
+    }
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
   /**
@@ -81,9 +79,9 @@ public class TablesPage {
       WebElement header = table.findElement(By.xpath("//th[" + column + "]"));
       return highlightElement(header);
     }
-    catch (NoSuchElementException | InterruptedException e) {
+    catch (NoSuchElementException e) {
       System.out.println("Header not found in table.");
-      return table;
+      throw new NoSuchElementException("NoSuchElementException: Header not found for column index: " + column);
     }
   }
 
@@ -93,17 +91,21 @@ public class TablesPage {
    * @param header The value of the table header.
    * @return The index (column number) of the table header.
    * @throws NoSuchElementException If the cell cannot be found.
-   * @throws InterruptedException If the thread is interrupted during sleep.
    */
-  public int getColumnNumberByHeader(WebElement table, String header) {
-    List<WebElement> allHeaders = table.findElements(By.xpath(".//th"));
+  public int getColumnNumberByHeader(WebElement table, String header) throws NoSuchElementException {
+    try {
+      List<WebElement> allHeaders = table.findElements(By.xpath(".//th"));
 
-    for (int i = 0; i < allHeaders.size(); i++) {
-      if (allHeaders.get(i).getText().trim().equalsIgnoreCase(header.trim())) {
-        return i + 1;
+      for (int i = 0; i < allHeaders.size(); i++) {
+        if (allHeaders.get(i).getText().trim().equalsIgnoreCase(header.trim())) {
+          return i + 1;
+        }
       }
+      throw new NoSuchElementException("NoSuchElementException: column header not found for " + header);
     }
-    return -1;
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
 
@@ -115,7 +117,12 @@ public class TablesPage {
    * @throws NoSuchElementException If the cell cannot be found.
    */
   public WebElement getRowByCellValue(WebElement table, String cellValue) throws NoSuchElementException {
-    return table.findElement(By.xpath("//td[text()='" + cellValue + "']/parent::tr"));
+    try {
+      return table.findElement(By.xpath("//td[text()='" + cellValue + "']/parent::tr"));
+    }
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
   /**
@@ -126,8 +133,13 @@ public class TablesPage {
    * @return The webElement of the table cell.
    * @throws NoSuchElementException If the cell cannot be found.
    */
-  public WebElement getRowByCellValues(WebElement table, String cellValue1, String cellValue2) throws InterruptedException {
-    return table.findElement(By.xpath("//tr[./td[contains(.,'" + cellValue1 +"')] and ./td[contains(.,'" + cellValue2 + "')]]"));
+  public WebElement getRowByCellValues(WebElement table, String cellValue1, String cellValue2) throws NoSuchElementException {
+    try {
+      return table.findElement(By.xpath("//tr[./td[contains(.,'" + cellValue1 +"')] and ./td[contains(.,'" + cellValue2 + "')]]"));
+    }
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
   /**
@@ -138,16 +150,21 @@ public class TablesPage {
    * @return The index (row number) of the table row.
    * @throws NoSuchElementException If the cell cannot be found.
    */
-  public int getRowNumberByCellValue(WebElement table, String cellValue, boolean hasHeader) {
-    List<WebElement> allRows = table.findElements(By.xpath(".//tr"));
+  public int getRowNumberByCellValue(WebElement table, String cellValue, boolean hasHeader) throws NoSuchElementException {
+    try {
+      List<WebElement> allRows = table.findElements(By.xpath(".//tr"));
 
-    for (int i = 0; i < allRows.size(); i++) {
-      if (allRows.get(i).getText().trim().contains(cellValue.trim())) {
-        int headerOffset = hasHeader ? 0 : 1;
-        return i + headerOffset;
+      for (int i = 0; i < allRows.size(); i++) {
+        if (allRows.get(i).getText().trim().contains(cellValue.trim())) {
+          int headerOffset = hasHeader ? 0 : 1;
+          return i + headerOffset;
+        }
       }
+      throw new NoSuchElementException("NoSuchElementException: Row not found for with a cell value of " + cellValue);
     }
-    return -1;
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
   /**
@@ -159,16 +176,21 @@ public class TablesPage {
    * @return The index (row number) of the table row.
    * @throws NoSuchElementException If the cell cannot be found.
    */
-  public int getRowNumberByCellValues(WebElement table, String cellValue1, String cellValue2, boolean hasHeader) {
-    List<WebElement> allRows = table.findElements(By.xpath(".//tr"));
+  public int getRowNumberByCellValues(WebElement table, String cellValue1, String cellValue2, boolean hasHeader) throws NoSuchElementException {
+    try {
+      List<WebElement> allRows = table.findElements(By.xpath(".//tr"));
 
-    for (int i = 0; i < allRows.size(); i++) {
-      if (allRows.get(i).getText().trim().contains(cellValue1.trim()) && allRows.get(i).getText().trim().contains(cellValue2.trim())) {
-        int headerOffset = hasHeader ? 0 : 1;
-        return i + headerOffset;
+      for (int i = 0; i < allRows.size(); i++) {
+        if (allRows.get(i).getText().trim().contains(cellValue1.trim()) && allRows.get(i).getText().trim().contains(cellValue2.trim())) {
+          int headerOffset = hasHeader ? 0 : 1;
+          return i + headerOffset;
+        }
       }
+      throw new NoSuchElementException("NoSuchElementException: Row not found that has cell value of " + cellValue1 + " and another cell value of " + cellValue2);
     }
-    return -1;
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
 
@@ -187,7 +209,5 @@ public class TablesPage {
     Highlight.unhighlightElement(this.driver, element);
     return element;
   }
-
-
 
 }

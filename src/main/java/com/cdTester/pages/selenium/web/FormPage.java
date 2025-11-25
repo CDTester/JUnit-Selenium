@@ -96,7 +96,7 @@ public class FormPage {
 
   public void clearText(WebElement element) throws InterruptedException {
     highlightElement(element);
-    element.click();
+    element.clear();
   }
 
   public String getUrl() {

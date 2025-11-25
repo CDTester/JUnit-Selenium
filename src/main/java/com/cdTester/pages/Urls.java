@@ -52,7 +52,7 @@ public class Urls {
     this.login = base + "selenium/web/login.html";
     this.mouseInteraction = base + "selenium/web/mouse_interaction.html";
     this.singleTextInput = base + "selenium/web/single_text_input.html";
-    this.tables = "file://" + System.getProperty("user.dir") + "/src/test/resources/tables.html";
+    this.tables = base + System.getProperty("user.dir") + "/src/test/resources/tables.html";
     this.upload = base + "upload";
     this.windows = base + "selenium/web/window_switching_tests/page_with_frame.html";
 

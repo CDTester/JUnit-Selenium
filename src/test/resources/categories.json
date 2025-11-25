@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Ignored/Skipped tests",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Broken Locators",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(?i)(NoSuchElementException).*"
+  },
+  {
+    "name": "Stale element",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(?i)(StaleElementReferenceException).*"
+  },
+  {
+    "name": "Timeout issues",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*(?i)(TimeoutException).*"
+  },
+  {
+    "name": "Product defects",
+    "matchedStatuses": ["failed"]
+  },
+  {
+    "name": "Other test automation issues",
+    "matchedStatuses": ["broken"],
+    "messageRegex": "^(?!.*NoSuchElementException)(?!.*StaleElementReferenceException)(?!.*TimeoutException).*$"
+  }
+]

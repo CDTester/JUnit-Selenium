@@ -1,27 +1,54 @@
-name: Selenium Tests
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-jobs:
-  test:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-      - name: Set up JDK 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: '21.0.5'
-          distribution: 'temurin'
-          cache: 'maven'
-      - name: Build with Maven and run Selenium smoke tests
-        run: mvn clean install -Denv=prod -Dgroups=smoke
-      - name: Archive test reports
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: test-reports
-          path: target/*reports/*
+  name: Selenium Tests
+  on:
+    push:
+      branches: [ master ]
+    pull_request:
+      branches: [ master ]
+  jobs:
+    test:
+      timeout-minutes: 60
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v5
+        - name: Set up JDK 21
+          uses: actions/setup-java@v5
+          with:
+            java-version: '21.0.5'
+            distribution: 'jetbrains'
+            cache: 'maven'
+        - name: Build with Maven
+          run: mvn clean install -DskipTests
+        - name: Download Allure report history
+          uses: actions/checkout@v5
+          if: always()
+          continue-on-error: true
+          with:
+            #ref: allure-history
+            path: allure-history
+        - name: run Selenium smoke tests
+          run: mvn clean test -Denv=prod -Dgroups=smoke
+        - name: Build Allure Report
+          #run: allure generate target/allure-results --clean -o target/allure-report --single-file
+          uses: simple-elf/allure-report-action@v1.13
+          if: always()
+          with:
+            gh_pages: allure-history
+            allure_report: target/allure-report
+            allure_results: target/allure-results
+            allure_history: allure-history
+        - name: Archive test reports
+          if: always()
+          uses: actions/upload-artifact@v4
+          with:
+            name: test-reports
+            path: |
+              target/allure*
+              target/site/
+        - name: Publish Allure report
+          uses: peaceiris/actions-gh-pages@v4
+          if: always()
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_branch: master
+            publish_dir: allure-history

@@ -127,6 +127,30 @@ The Allure Reporter is a rich report that provides functionality for test steps.
 
 The next step for this repo is to add Allure reporter.
 
+```bash
+# Generate report and open report, machine is used as a server to host the report
+mvn allure:serve
+
+# Or generate report to target/site/allure-maven-plugin
+mvn allure:report
+```
+
+There appears to be an issue with using:
+```bash
+# generate report
+allure generate target/allure-results --clean - o target/allure-report 
+## optional --single-file 
+
+## open report
+allure open target/allure-report
+```
+
+The issue is that assertion errors do not show the expected and actual values in the report
+![Allure exception error missing values](docs/allure_issue.png)
+
+But when `mvn allure:report` is used the values are displauyed:
+![Mvn Allure exception error shows values](docs/mvn_allure_no_issue.png)
+
 
 ## Selenium 
 ### import drivers

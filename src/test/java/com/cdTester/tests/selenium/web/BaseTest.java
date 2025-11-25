@@ -1,25 +1,19 @@
 package com.cdTester.tests.selenium.web;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.io.*;
 import java.time.Duration;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 import com.cdTester.utils.ConfigManager;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.io.FileHandler;
 
 
 public class BaseTest {
@@ -31,15 +25,51 @@ public class BaseTest {
 
   @BeforeAll
   protected static void setUpSuite() {
-    System.out.println("BeforeSuite executed");
-    // No ITestContext parameter - just basic setup
     File outputDir = new File("test-output");
     if (!outputDir.exists()) {
       outputDir.mkdirs();
     }
     config = ConfigManager.getInstance();
     browser = (config.getBrowser() != null) ? config.getBrowser() : "chrome";
+    setEnvironmentInfo();
   }
+
+  @BeforeEach
+  protected void allureBeforeEachReporter() {
+    Allure.parameter("Browser", System.getProperty("browser", "chrome"));
+  }
+
+  public static void setEnvironmentInfo() {
+    String resultsDir = "target/allure-results";
+
+    // Create directory if it doesn't exist
+    File directory = new File(resultsDir);
+    if (!directory.exists()) {
+      directory.mkdirs();
+    }
+
+    // Write environment.properties (this shows in the report)
+    try (PrintWriter writer = new PrintWriter(new FileWriter(resultsDir + "/environment.properties"))) {
+      writer.println("Environment=" + System.getProperty("env", "qa"));
+      writer.println("Browser=" + System.getProperty("browser", "chrome"));
+      writer.println("Headless=" + System.getProperty("headless", "false"));
+      writer.println("Java.Version=" + System.getProperty("java.version"));
+      writer.println("OS=" + System.getProperty("os.name") + " " + System.getProperty("os.version"));
+      writer.println("User=" + System.getProperty("user.name"));
+      writer.println("Test.Date=" + java.time.LocalDateTime.now().toString());
+    } catch (IOException e) {
+      System.err.println("Failed to write environment.properties: " + e.getMessage());
+    }
+  }
+
+//  @AfterEach
+//  public void quit() {
+//    System.out.println("BaseTest: AfterEach");
+//    if (driver != null) {
+//      System.out.println("quiting browser in baseTest");
+//      driver.quit();
+//    }
+//  }
 
   protected WebDriver startBrowserDriver() {
     if (browser.equalsIgnoreCase("firefox")) {
@@ -65,34 +95,46 @@ public class BaseTest {
   }
 
   protected ChromeDriver startChromeDriver(int waitInSeconds) {
-    ChromeOptions options = new ChromeOptions();
-    options.setImplicitWaitTimeout(Duration.ofSeconds(waitInSeconds));
-    options.addArguments("disable-search-engine-choice-screen");
-    if (config.getEnv().equals("prod")) {
-        options.addArguments("--headless=new");
-    }
+    ChromeOptions options = Allure.step("ChromeOptions", step -> {
+      ChromeOptions option = new ChromeOptions();
+      option.setImplicitWaitTimeout(Duration.ofSeconds(waitInSeconds));
+      option.addArguments("disable-search-engine-choice-screen");
+      if (config.getEnv().equals("prod")) {
+        option.addArguments("--headless=new");
+      }
+      step.parameter("Options", option.toString());
+      return option;
+    });
     return startChromeDriver(options);
   }
 
   protected ChromeDriver startChromeDriver(int waitInSeconds, String[] arguments, HashMap<String, Object> capabilities) {
-    ChromeOptions options = new ChromeOptions();
-    options.setImplicitWaitTimeout(Duration.ofSeconds(waitInSeconds));
-    options.addArguments("disable-search-engine-choice-screen");
-    for (String args : arguments ) {
-      options.addArguments(args);
-    }
-    for (String option : capabilities.keySet()) {
-      options.setCapability(option, capabilities.get(option));
-    }
+    ChromeOptions options = Allure.step("ChromeOptions", step -> {
+      ChromeOptions option = new ChromeOptions();
+      option.setImplicitWaitTimeout(Duration.ofSeconds(waitInSeconds));
+      for (String args : arguments ) {
+        option.addArguments(args);
+      }
+      for (String opt : capabilities.keySet()) {
+        option.setCapability(opt, capabilities.get(opt));
+      }
+      if (config.getEnv().equals("prod")) {
+        option.addArguments("--headless=new");
+      }
+      step.parameter("Options", option.toString());
+      return option;
+    });
     return startChromeDriver(options);
   }
 
   protected ChromeDriver startChromeDriver(ChromeOptions options) {
-    driver = new ChromeDriver(options);
-    driver.manage().window().maximize();
+    Allure.step("Starting ChromeDriver", step -> {
+      driver = new ChromeDriver(options);
+      driver.manage().window().maximize();
+      step.parameter("Driver", driver.toString());
+    });
     return (ChromeDriver) driver;
   }
-
 
 //  protected static ChromeOptions getDefaultChromeOptions() {
 //    ChromeOptions options = new ChromeOptions();
@@ -106,29 +148,6 @@ public class BaseTest {
 //    return options;
 //  }
 
-//  protected File getTempDirectory(String prefix) {
-//    File tempDirectory = null;
-//    try {
-//      tempDirectory = Files.createTempDirectory(prefix).toFile();
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
-//    tempDirectory.deleteOnExit();
-//
-//    return tempDirectory;
-//  }
-
-//  protected File getTempFile(String prefix, String suffix) {
-//    File logLocation = null;
-//    try {
-//      logLocation = File.createTempFile(prefix, suffix);
-//    } catch (IOException e) {
-//      throw new RuntimeException(e);
-//    }
-//    logLocation.deleteOnExit();
-//
-//    return logLocation;
-//  }
 
 //  protected URL startStandaloneGrid() {
 //    int port = PortProber.findFreePort();
@@ -183,49 +202,45 @@ public class BaseTest {
 //    }
 //  }
 
-//  protected void enableLogging() {
-//    Logger logger = Logger.getLogger("");
-//    logger.setLevel(Level.FINE);
-//    Arrays.stream(logger.getHandlers()).forEach(handler -> {
-//      handler.setLevel(Level.FINE);
+//  protected void takeScreenshotAllure(String name) {
+//    byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+//    Allure.addAttachment(name, new ByteArrayInputStream(screenshot));
+//  }
+
+
+//  protected CompletableFuture<String> takeScreenshot(WebDriver driver, String fileName) {
+//    return CompletableFuture.supplyAsync(() -> {
+//      try {
+//        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        TakesScreenshot screenshot = (TakesScreenshot) driver;
+//        File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
+//        File destFile = new File("./" + fileName + "_" + timestamp + ".png");
+//        FileHandler.copy(sourceFile, destFile);
+//        System.out.println("Screenshot saved: " + destFile.getAbsolutePath());
+//      }
+//      catch (IOException e) {
+//        System.out.println("Failed to save screenshot: " + e.getMessage());
+//      }
+//      return "ScreenshotCompleted";
+//    });
+//  }
+//
+//  protected CompletableFuture<String> takeScreenshotElement(WebElement element) {
+//    return CompletableFuture.supplyAsync(() -> {
+//      String img = null;
+//      try {
+//        img = element.getScreenshotAs(OutputType.BASE64);
+//        File sourceFile = element.getScreenshotAs(OutputType.FILE);
+//        File destFile = new File(element.toString() + "_screenshot.png");
+//        FileHandler.copy(sourceFile, destFile);
+//      }
+//      catch (IOException e) {
+//        System.out.println("Failed to save screenshot: " + e.getMessage());
+//      }
+//      return img;
 //    });
 //  }
 
-  protected CompletableFuture<String> takeScreenshot(WebDriver driver, String fileName) {
-    return CompletableFuture.supplyAsync(() -> {
-      try {
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        TakesScreenshot screenshot = (TakesScreenshot) driver;
-        File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
-        File destFile = new File("./" + fileName + "_" + timestamp + ".png");
-        FileHandler.copy(sourceFile, destFile);
-        System.out.println("Screenshot saved: " + destFile.getAbsolutePath());
-      }
-      catch (IOException e) {
-        System.out.println("Failed to save screenshot: " + e.getMessage());
-      }
-      return "ScreenshotCompleted";
-    });
-  }
 
-  protected CompletableFuture<String> takeScreenshotElement(WebElement element) {
-    return CompletableFuture.supplyAsync(() -> {
-      try {
-        File sourceFile = element.getScreenshotAs(OutputType.FILE);
-        File destFile = new File(element.toString() + "_screenshot.png");
-        FileHandler.copy(sourceFile, destFile);
-      }
-      catch (IOException e) {
-        System.out.println("Failed to save screenshot: " + e.getMessage());
-      }
-      return "ElementScreenshotCompleted";
-    });
-  }
 
-  @AfterEach
-  public void quit() {
-    if (driver != null) {
-      driver.quit();
-    }
-  }
 }

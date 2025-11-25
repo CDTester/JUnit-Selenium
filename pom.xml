@@ -14,6 +14,8 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>4.38.0</selenium.version>
+        <allure.version>2.25.0</allure.version>
+        <aspectj.version>1.9.21</aspectj.version>
         <junit.version>6.0.0</junit.version>
         <groups>smoke | build</groups>
     </properties>
@@ -24,6 +26,27 @@
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
+
+    <!-- Add allure-bom to dependency management to ensure correct versions of all the dependencies are used -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-bom</artifactId>
+                <version>${allure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <dependencies>
         <dependency>
@@ -56,18 +79,17 @@
             <artifactId>selenium-logger</artifactId>
             <version>2.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -78,6 +100,12 @@
                 <configuration>
                     <groups>${groups}</groups>
                     <!--<excludedGroups>broken, regression</excludedGroups>-->
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <systemPropertyVariables>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
                     <statelessTestsetReporter
                             implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
                         <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
@@ -100,8 +128,15 @@
                     <skip>false</skip>
                     <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>3.5.3</version>
@@ -120,6 +155,16 @@
                     <reportsDirectories>
                         <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     </reportsDirectories>
+                </configuration>
+            </plugin>-->
+            <!-- Allure Maven Plugin -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
+                <configuration>
+                    <reportVersion>${allure.version}</reportVersion>
+                    <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
                 </configuration>
             </plugin>
         </plugins>

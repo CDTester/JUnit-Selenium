@@ -2,11 +2,17 @@ package com.cdTester.tests.selenium.web.interactions;
 
 import com.cdTester.pages.Urls;
 import com.cdTester.tests.selenium.web.BaseTest;
+import com.cdTester.utils.TestResultListener;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 
+@Epic("Epic: Working with web drivers")
+@ExtendWith(TestResultListener.class)
+@Tag("driver")
 public class driverTest extends BaseTest {
   Urls url = new Urls(BaseTest.config, "selenium");
   protected final String URL = url.base;
@@ -14,53 +20,50 @@ public class driverTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
-    driver = startChromeDriver(1);
-  }
-
-  @AfterEach
-  public void tearDown(TestInfo testInfo) {
-    // Check if test failed
-    if (testInfo.getTags().contains("failed")) {
-      String text =  testInfo.getDisplayName().replace(" ", "_").replace("'", "");
-      takeScreenshot(driver, text).join();
-      driver.quit();
-    }
-    else {
-      driver.quit();
-    }
+    Allure.step("GIVEN ChromeDriver has been initiated", step -> {
+      driver = startChromeDriver(1);
+    });
   }
 
   @Test
-  @Tag("failed")
-  @Tag("driver")
   @Tag("smoke")
+  @Feature("Feature: ChromeDriver")
+  @Story("Story: Navigate to a URL")
+  @TmsLink("TC-091")
   @DisplayName("Browser title should be 'Selenium'")
-  public void getTitle(TestReporter testReporter) {
-    try {
+  @Severity(SeverityLevel.NORMAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-197")
+  public void getTitle() {
+    Allure.step("WHEN a the browser is navigated to a URL", step -> {
+      step.parameter("URL", "http://www.example.com");
       driver.get(URL);
+    });
+
+    Allure.step("THEN the browser title should be 'Selenium'", step -> {
       String title = driver.getTitle();
-      testReporter.publishEntry("Page Title", title);
-      Assertions.assertEquals("Selenium", title, "Page title is not as expected");
-    }
-    catch (Exception e) {
-      System.out.println("Exception occurred: " + e.getMessage());
-    }
+      step.parameter("Page Title", title);
+      Assertions.assertEquals("Helenium", title, "Page title is not as expected");
+    });
   }
 
-  @DisplayName("Should have current URL of :")
   @ParameterizedTest(name = "{0}")
   @ValueSource(strings = { "https://www.selenium.dev/", "https://docs.junit.org/current/user-guide/" })
-  @Tag("driver")
   @Tag("smoke")
-  public void getCurrentUrl(String UrlParam, TestReporter testReporter) {
-    try {
+  @Feature("Feature: ChromeDriver")
+  @Story("Story: Navigate to a URL")
+  @TmsLink("TC-091")
+  @DisplayName("Parameterised test to get current URL of :")
+  public void getCurrentUrl(String UrlParam) {
+    Allure.step("WHEN a the browser is navigated to a URL", step -> {
+      step.parameter("URL", UrlParam);
       driver.get(UrlParam);
+    });
+
+    Allure.step("THEN the current URL can be retrieved", step -> {
       String url = driver.getCurrentUrl();
-      testReporter.publishEntry("Current URL", url);
+      step.parameter("Current URL", url);
       Assertions.assertEquals(UrlParam, url, "Current URL is not as expected");
-    }
-    catch (Exception e) {
-      System.out.println("Exception occurred: " + e.getMessage());
-    }
+    });
   }
 }
