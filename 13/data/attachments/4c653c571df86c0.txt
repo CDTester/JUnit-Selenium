@@ -1,0 +1,2 @@
+❌ Test FAILED: "https://www.selenium.dev/"
+Reason: Base URL not found for: selenium

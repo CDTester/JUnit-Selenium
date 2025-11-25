@@ -1,0 +1,2 @@
+❌ Test FAILED: Browser title should be 'Selenium'
+Reason: Base URL not found for: selenium

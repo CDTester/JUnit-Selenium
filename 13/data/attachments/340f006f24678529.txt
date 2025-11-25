@@ -1,0 +1,2 @@
+❌ Test FAILED: Should be able to get text from alert and accept it
+Reason: Base URL not found for: selenium

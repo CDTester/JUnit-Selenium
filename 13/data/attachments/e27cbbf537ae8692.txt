@@ -1,0 +1,3 @@
+❌ Test FAILED: Should be able to navigate to a URL using the driver.get() method
+Reason: Base URL not found for: selenium
+📸 Taking screenshot for failed test...

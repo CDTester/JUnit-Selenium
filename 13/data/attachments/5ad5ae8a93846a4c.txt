@@ -1,0 +1,2 @@
+❌ Test FAILED: "https://docs.junit.org/current/user-guide/"
+Reason: Base URL not found for: selenium

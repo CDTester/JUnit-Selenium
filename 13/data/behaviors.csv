@@ -1,0 +1,8 @@
+"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
+"9","","0","","1","0","","0"
+"3","Epic: Working with web drivers","0","Feature: ChromeDriver","0","0","Story: Navigate to a URL","0"
+"1","Epic: Working with iframes","0","Feature: Iframe Tests","0","0","Story: Forms iframe","0"
+"1","Working with web tables","0","Tables Tests","0","0","Get table cell value","0"
+"1","Epic: Working with page navigation","0","Feature: Navigation Tests","0","0","Story: driver","0"
+"1","Epic: Working with alerts","0","Feature: Alerts Tests","0","0","Story: Basic alert","0"
+"1","Epic: Working with print options","0","Feature: PrintOptions Tests","0","0","Story: Orientation","0"

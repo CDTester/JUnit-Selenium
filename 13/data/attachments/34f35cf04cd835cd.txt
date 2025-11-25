@@ -1,0 +1,2 @@
+❌ Test FAILED: Should be able to print in landscape
+Reason: Base URL not found for: selenium
