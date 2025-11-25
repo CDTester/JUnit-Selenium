@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.NoSuchElementException;
 
 
 public class Alerts {
@@ -47,10 +48,15 @@ public class Alerts {
     PageFactory.initElements(driver, this);
   }
 
-  public void click(WebElement element) throws InterruptedException {
-    Highlight.highlightElement(this.driver, element);
-    element.click();
-    this.wait.until(ExpectedConditions.alertIsPresent());
+  public void click(WebElement element) throws InterruptedException, NoSuchElementException {
+    try {
+      Highlight.highlightElement(this.driver, element);
+      element.click();
+      this.wait.until(ExpectedConditions.alertIsPresent());
+    }
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
   public void createJsAlert(String jsCode) {
@@ -70,7 +76,7 @@ public class Alerts {
     String message = alert.getText();
     Thread.sleep(500);
 
-    if (acceptDismiss == "accept") {
+    if (acceptDismiss.equalsIgnoreCase("accept")) {
       alert.accept();
     }
     else {
@@ -79,11 +85,26 @@ public class Alerts {
     return message;
   }
 
+  public void close(String acceptDismiss) throws NoSuchElementException {
+    Alert alert = this.driver.switchTo().alert();
+    try {
+      if (acceptDismiss.equalsIgnoreCase("accept")) {
+        alert.accept();
+      }
+      else {
+        alert.dismiss();
+      }
+    }
+    catch (NoSuchElementException e) {
+      throw e;
+    }
+  }
+
   public void sendKeysToAlertAndClose(String text, String acceptDismiss) throws InterruptedException {
     Alert alert = this.driver.switchTo().alert();
     alert.sendKeys(text);
     Thread.sleep(500);
-    if (acceptDismiss == "accept") {
+    if (acceptDismiss.equalsIgnoreCase("accept")) {
       alert.accept();
     }
     else {
@@ -95,12 +116,16 @@ public class Alerts {
     return this.driver.getCurrentUrl();
   }
 
-  public WebDriver switchToIframe(By iframe) {
+  public WebDriver switchToIframe(By iframe) throws NoSuchElementException {
+    try {
+      WebElement iframeElement = this.driver.findElement(iframe);
+      System.out.println("Switching to iFrame: " + iframeElement.getAttribute("name"));
 
-    WebElement iframeElement = this.driver.findElement(iframe);
-    System.out.println("Switching to iFrame: " + iframeElement.getAttribute("name"));
-
-    return this.driver.switchTo().frame(iframeElement);
+      return this.driver.switchTo().frame(iframeElement);
+    }
+    catch (NoSuchElementException e) {
+      throw e;
+    }
   }
 
 }

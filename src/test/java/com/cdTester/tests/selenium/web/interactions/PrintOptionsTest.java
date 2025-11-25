@@ -1,11 +1,16 @@
 package com.cdTester.tests.selenium.web.interactions;
 
+import com.cdTester.utils.TestResultListener;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.print.PageMargin;
 import org.openqa.selenium.print.PrintOptions;
 import org.openqa.selenium.print.PageSize;
 import com.cdTester.tests.selenium.web.BaseTest;
 import com.cdTester.pages.Urls;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,100 +23,183 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * ensuring that the output meets your specific requirements.
  */
 
+@Epic("Epic: Working with print options")
+@Feature("Feature: PrintOptions Tests")
+@Tag("printOptions")
+@ExtendWith(TestResultListener.class)
 public class PrintOptionsTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
     Urls url = new Urls(BaseTest.config, "selenium");
-    driver = startChromeDriver(1);
-    driver.get(url.base);
+    Allure.step("GIVEN ChromeDriver has been initiated", step -> {
+      driver = startChromeDriver(1);
+    });
+    Allure.step("AND the web page has loaded", step -> {
+      step.parameter("URL", url.base);
+      driver.get(url.base);
+    });
   }
 
-  @AfterEach
-  public void endSession() {
-    driver.quit();
-  }
 
   @Test
   @Tag("smoke")
-  @Tag("printOptions")
+  @Story("Story: Orientation")
+  @TmsLink("TC-121")
   @DisplayName("Should be able to print in landscape")
+  @Severity(SeverityLevel.BLOCKER)
+  @Owner("QA/Chris")
+  @Issue("BUG-1121")
   public void TestOrientation() {
     PrintOptions printOptions = new PrintOptions();
-    printOptions.setOrientation(PrintOptions.Orientation.LANDSCAPE);
-
-    assertEquals(PrintOptions.Orientation.LANDSCAPE, printOptions.getOrientation());
+    Allure.step("WHEN the print orientation is set to landscape", step -> {
+      printOptions.setOrientation(PrintOptions.Orientation.LANDSCAPE);
+    });
+    Allure.step("THEN the print orientation should be landscape", step -> {
+      step.parameter("Print Orientation", printOptions.getOrientation().toString());
+      assertEquals(PrintOptions.Orientation.LANDSCAPE, printOptions.getOrientation());
+    });
   }
 
 
   @Test
   @Tag("regression")
-  @Tag("printOptions")
+  @Story("Story: Print Range")
+  @TmsLink("TC-122")
   @DisplayName("Should be able set print page range")
+  @Severity(SeverityLevel.CRITICAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-1122")
   public void TestRange() {
     PrintOptions printOptions = new PrintOptions();
-    printOptions.setPageRanges("1-2");
-
-    String[] expectedRange = {"1", "2"};
-    assertEquals(expectedRange, printOptions.getPageRanges());
+    Allure.step("WHEN the print page range is set to 1-2", step -> {
+      printOptions.setPageRanges("1-2");
+    });
+    Allure.step("THEN the print page range should be 1-2", step -> {
+      step.parameter("Print Page Range", Arrays.toString(printOptions.getPageRanges()));
+      String[] expectedRange = {"1-2"};
+      assertEquals(Arrays.toString(expectedRange), Arrays.toString(printOptions.getPageRanges()));
+    });
   }
 
   @Test
   @Tag("regression")
-  @Tag("printOptions")
+  @Story("Story: Paper Size")
+  @TmsLink("TC-123")
   @DisplayName("Should be able set page paper size")
+  @Severity(SeverityLevel.NORMAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-1123")
   public void TestSize() {
     PrintOptions printOptions = new PrintOptions();
-    printOptions.setPageSize(new PageSize(27.94, 21.59)); // A4 size in cm
 
-    assertEquals(27.94, printOptions.getPageSize().getHeight());
+    Allure.step("WHEN the page size is set to A4", step -> {
+      printOptions.setPageSize(new PageSize(27.94, 21.59)); // A4 size in cm
+    });
+    Allure.step("THEN the page height should be 27.94", step -> {
+      step.parameter("Page Size Height", printOptions.getPageSize().getHeight());
+      assertEquals(27.94, printOptions.getPageSize().getHeight());
+    });
+    Allure.step("AND the page width should be 21.59", step -> {
+      step.parameter("Page Size Width", printOptions.getPageSize().getWidth());
+      assertEquals(21.59, printOptions.getPageSize().getWidth());
+    });
   }
 
   @Test
   @Tag("regression")
-  @Tag("printOptions")
+  @Story("Story: Print Margins")
+  @TmsLink("TC-124")
   @DisplayName("Should be able set page paper margins")
+  @Severity(SeverityLevel.MINOR)
+  @Owner("QA/Chris")
+  @Issue("BUG-1124")
   public void TestMargins() {
     PrintOptions printOptions = new PrintOptions();
     PageMargin margins = new PageMargin(1.1,1.2,1.3,1.4);
-    printOptions.setPageMargin(margins);
 
-    assertEquals(1.1, margins.getTop());
-    assertEquals(1.2, margins.getBottom());
-    assertEquals(1.3, margins.getLeft());
-    assertEquals(1.4, margins.getRight());
+    Allure.step("WHEN the page margins are set", step -> {
+      step.parameter("margins", margins.toString());
+      printOptions.setPageMargin(margins);
+    });
+    Allure.step("THEN the top margin should be 1.1", step -> {
+      step.parameter("Margin", printOptions.getPageMargin().getTop());
+      assertEquals(1.1, printOptions.getPageMargin().getTop());
+    });
+    Allure.step("AND the bottom margin should be 1.2", step -> {
+      step.parameter("Margin", printOptions.getPageMargin().getBottom());
+      assertEquals(1.2, printOptions.getPageMargin().getBottom());
+    });
+    Allure.step("AND the left margin should be 1.3", step -> {
+      step.parameter("Margin", printOptions.getPageMargin().getLeft());
+      assertEquals(1.3, printOptions.getPageMargin().getLeft());
+    });
+    Allure.step("AND the right margin should be 1.4", step -> {
+      step.parameter("Margin", printOptions.getPageMargin().getRight());
+      assertEquals(1.4, printOptions.getPageMargin().getRight());
+    });
   }
 
   @Test
   @Tag("regression")
-  @Tag("printOptions")
+  @TmsLink("TC-125")
+  @Story("Story: Print Scale")
   @DisplayName("Should be able set print scale")
+  @Severity(SeverityLevel.TRIVIAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-1125")
   public void TestScale() {
     PrintOptions printOptions = new PrintOptions();
-    printOptions.setScale(.50);
-
-    assertEquals(0.50, printOptions.getScale());
+    Allure.step("WHEN the print scale is set to 0.50", step -> {;
+      step.parameter("Scale", 0.50);
+      printOptions.setScale(.50);
+    });
+    Allure.step("THEN the print scale should be 0.50", step -> {
+      step.parameter("Scale", printOptions.getScale());
+      assertEquals(0.50, printOptions.getScale());
+    });
   }
 
   @Test
   @Tag("regression")
-  @Tag("printOptions")
-  @DisplayName("Should be able set the background images to print")
-  public void TestBackground() {
-    PrintOptions printOptions = new PrintOptions();
-    printOptions.setBackground(true);
-
-    assertTrue(printOptions.getBackground());
-  }
-
-  @Test
-  @Tag("regression")
-  @Tag("printOptions")
+  @TmsLink("TC-125")
+  @Story("Story: Print Scale")
   @DisplayName("Should be able shrink the scale to fit on a page")
+  @Severity(SeverityLevel.TRIVIAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-1126")
   public void TestShrinkToFit() {
     PrintOptions printOptions = new PrintOptions();
-    printOptions.setShrinkToFit(true);
 
-    assertTrue(printOptions.getShrinkToFit());
+    Allure.step("WHEN the print scale is set to shrink to fit", step -> {;
+      step.parameter("Shrink to fit", true);
+      printOptions.setShrinkToFit(true);
+    });
+    Allure.step("THEN the print scale should be set to shrink to fit", step -> {
+      step.parameter("Shrink to fit", printOptions.getShrinkToFit());
+      assertTrue(printOptions.getShrinkToFit());
+    });
+  }
+
+
+  @Test
+  @Tag("regression")
+  @TmsLink("TC-127")
+  @Story("Story: Print background images")
+  @DisplayName("Should be able set the background images to print")
+  @Severity(SeverityLevel.TRIVIAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-1127")
+  public void TestBackground() {
+    PrintOptions printOptions = new PrintOptions();
+
+    Allure.step("WHEN the print background images is set to true", step -> {
+      step.parameter("Print Background", true);
+      printOptions.setBackground(true);
+    });
+  Allure.step("THEN the print background images should be set to true", step -> {
+      step.parameter("Print Background", printOptions.getBackground());
+      assertTrue(printOptions.getBackground());
+    });
   }
 }
