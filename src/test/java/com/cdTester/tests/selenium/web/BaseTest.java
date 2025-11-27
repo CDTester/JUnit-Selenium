@@ -76,7 +76,7 @@ public class BaseTest {
       return startFirefoxDriver();
     }
     else {
-      return startChromeDriver();
+      return startChromeDriver(1);
     }
   }
 
@@ -90,9 +90,9 @@ public class BaseTest {
     return (FirefoxDriver) driver;
   }
 
-  protected ChromeDriver startChromeDriver() {
-    return startChromeDriver(1);
-  }
+//  protected ChromeDriver startChromeDriver() {
+//    return startChromeDriver(1);
+//  }
 
   protected ChromeDriver startChromeDriver(int waitInSeconds) {
     ChromeOptions options = Allure.step("ChromeOptions", step -> {

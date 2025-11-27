@@ -6,6 +6,6 @@ public class BaseChromeTest extends BaseTest {
 
   @BeforeEach
   public void setup() {
-    startChromeDriver();
+    startChromeDriver(1);
   }
 }

@@ -4,16 +4,21 @@ import com.cdTester.utils.TestResultListener;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.Pdf;
+import org.openqa.selenium.PrintsPage;
+import org.openqa.selenium.bidi.browsingcontext.BrowsingContext;
 import org.openqa.selenium.print.PageMargin;
 import org.openqa.selenium.print.PrintOptions;
 import org.openqa.selenium.print.PageSize;
 import com.cdTester.tests.selenium.web.BaseTest;
 import com.cdTester.pages.Urls;
+import com.cdTester.utils.AllurePDFAttachment;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Printing a webpage is a common task, whether for sharing information or maintaining archives.
@@ -23,17 +28,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * ensuring that the output meets your specific requirements.
  */
 
-@Epic("Epic: Working with print options")
-@Feature("Feature: PrintOptions Tests")
-@Tag("printOptions")
+@Epic("Epic: Working with print")
+@Tag("print")
 @ExtendWith(TestResultListener.class)
-public class PrintOptionsTest extends BaseTest {
+public class PrintTest extends BaseTest {
 
   @BeforeEach
   public void createSession() {
     Urls url = new Urls(BaseTest.config, "selenium");
     Allure.step("GIVEN ChromeDriver has been initiated", step -> {
-      driver = startChromeDriver(1);
+      String[] args = {};
+      HashMap<String, Object> capabilities = new HashMap<String, Object>();
+      capabilities.put("webSocketUrl", true);
+      driver = startChromeDriver(1, args, capabilities);
     });
     Allure.step("AND the web page has loaded", step -> {
       step.parameter("URL", url.base);
@@ -41,9 +48,9 @@ public class PrintOptionsTest extends BaseTest {
     });
   }
 
-
   @Test
   @Tag("smoke")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Orientation")
   @TmsLink("TC-121")
   @DisplayName("Should be able to print in landscape")
@@ -64,6 +71,7 @@ public class PrintOptionsTest extends BaseTest {
 
   @Test
   @Tag("regression")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Print Range")
   @TmsLink("TC-122")
   @DisplayName("Should be able set print page range")
@@ -84,6 +92,7 @@ public class PrintOptionsTest extends BaseTest {
 
   @Test
   @Tag("regression")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Paper Size")
   @TmsLink("TC-123")
   @DisplayName("Should be able set page paper size")
@@ -108,6 +117,7 @@ public class PrintOptionsTest extends BaseTest {
 
   @Test
   @Tag("regression")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Print Margins")
   @TmsLink("TC-124")
   @DisplayName("Should be able set page paper margins")
@@ -143,6 +153,7 @@ public class PrintOptionsTest extends BaseTest {
   @Test
   @Tag("regression")
   @TmsLink("TC-125")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Print Scale")
   @DisplayName("Should be able set print scale")
   @Severity(SeverityLevel.TRIVIAL)
@@ -163,6 +174,7 @@ public class PrintOptionsTest extends BaseTest {
   @Test
   @Tag("regression")
   @TmsLink("TC-125")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Print Scale")
   @DisplayName("Should be able shrink the scale to fit on a page")
   @Severity(SeverityLevel.TRIVIAL)
@@ -181,10 +193,10 @@ public class PrintOptionsTest extends BaseTest {
     });
   }
 
-
   @Test
   @Tag("regression")
   @TmsLink("TC-127")
+  @Feature("Feature: PrintOptions Tests")
   @Story("Story: Print background images")
   @DisplayName("Should be able set the background images to print")
   @Severity(SeverityLevel.TRIVIAL)
@@ -197,9 +209,61 @@ public class PrintOptionsTest extends BaseTest {
       step.parameter("Print Background", true);
       printOptions.setBackground(true);
     });
-  Allure.step("THEN the print background images should be set to true", step -> {
+    Allure.step("THEN the print background images should be set to true", step -> {
       step.parameter("Print Background", printOptions.getBackground());
       assertTrue(printOptions.getBackground());
+    });
+  }
+
+  @Test
+  @Tag("regression")
+  @Feature("Feature: Print Tests")
+  @Story("Story: Print")
+  @TmsLink("TC-131")
+  @DisplayName("Should be able to print current page using PrintsPage interface")
+  @Severity(SeverityLevel.BLOCKER)
+  @Owner("QA/Chris")
+  @Issue("BUG-1131")
+  public void PrintWithPrintsPage() {
+    PrintOptions printOptions = new PrintOptions();
+    printOptions.setOrientation(PrintOptions.Orientation.LANDSCAPE);
+    printOptions.setScale(.50);
+    PrintsPage printer = (PrintsPage) driver;
+    AtomicReference<Pdf> printedPage = new AtomicReference<>();
+
+    Allure.step("WHEN the current page is printed", step -> {
+      printedPage.set(printer.print(printOptions));
+      AllurePDFAttachment.attachPDF(printedPage.get(), "printed with PrintsPage");
+    });
+    Allure.step("THEN the printed page is not null", step -> {
+      step.parameter("Printed with PrintsPage", printedPage.get().toString());
+      assertNotNull(printedPage);
+    });
+  }
+
+  @Test
+  @Tag("regression")
+  @Feature("Feature: Print Tests")
+  @Story("Story: Print")
+  @TmsLink("TC-132")
+  @DisplayName("Should be able to print current page using BrowsingContext interface")
+  @Severity(SeverityLevel.CRITICAL)
+  @Owner("QA/Chris")
+  @Issue("BUG-1132")
+  public void PrintWithBrowsingContextTest() {
+    BrowsingContext browsingContext = new BrowsingContext(driver, driver.getWindowHandle());
+    PrintOptions printOptions = new PrintOptions();
+    printOptions.setOrientation(PrintOptions.Orientation.LANDSCAPE);
+    printOptions.setShrinkToFit(true);
+    AtomicReference<String> printer = new AtomicReference<>();
+
+    Allure.step("WHEN the current page is printed", step -> {
+      printer.set(browsingContext.print(printOptions));
+      AllurePDFAttachment.attachPDF(printer.get().toString(),"printed with BrowsingContext");
+    });
+    Allure.step("THEN the printed page is not null", step -> {
+      step.parameter("Printed Page", printer.get());
+      assertTrue(printer.get().length() > 0);
     });
   }
 }

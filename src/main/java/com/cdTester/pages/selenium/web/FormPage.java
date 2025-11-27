@@ -7,6 +7,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class FormPage {
   public WebDriver driver;
@@ -103,5 +106,11 @@ public class FormPage {
     return this.driver.getCurrentUrl();
   }
 
+  public String getOptionsText(Select options) throws InterruptedException {
+    return Arrays.toString(options.getOptions().stream().map(WebElement::getText).toArray());
+  }
 
+  public String getOptionsText(List<WebElement> options) throws InterruptedException {
+    return Arrays.toString(options.stream().map(WebElement::getText).toArray());
+  }
 }

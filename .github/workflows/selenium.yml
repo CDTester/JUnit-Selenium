@@ -4,6 +4,10 @@
       branches: [ master ]
     pull_request:
       branches: [ master ]
+  permissions:
+    contents: write  # Needed to push to gh-pages
+    pages: write
+    id-token: write
   jobs:
     test:
       timeout-minutes: 60
