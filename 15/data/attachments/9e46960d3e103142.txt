@@ -1,0 +1,2 @@
+Switching to iFrame: iframe1-name
+✅ Test PASSED: Should switch to iFrame using id
