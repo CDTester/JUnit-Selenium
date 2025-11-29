@@ -1,0 +1,3 @@
+❌ Test FAILED: Browser title should be 'Selenium'
+Reason: Page title is not as expected ==> expected: <Helenium> but was: <Selenium>
+📸 Taking screenshot for failed test...
