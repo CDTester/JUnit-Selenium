@@ -62,14 +62,6 @@ public class BaseTest {
     }
   }
 
-//  @AfterEach
-//  public void quit() {
-//    System.out.println("BaseTest: AfterEach");
-//    if (driver != null) {
-//      System.out.println("quiting browser in baseTest");
-//      driver.quit();
-//    }
-//  }
 
   protected WebDriver startBrowserDriver() {
     if (browser.equalsIgnoreCase("firefox")) {
@@ -79,20 +71,6 @@ public class BaseTest {
       return startChromeDriver(1);
     }
   }
-
-  protected FirefoxDriver startFirefoxDriver() {
-    return startFirefoxDriver(new FirefoxOptions());
-  }
-
-  protected FirefoxDriver startFirefoxDriver(FirefoxOptions options) {
-    options.setImplicitWaitTimeout(Duration.ofSeconds(1));
-    driver = new FirefoxDriver(options);
-    return (FirefoxDriver) driver;
-  }
-
-//  protected ChromeDriver startChromeDriver() {
-//    return startChromeDriver(1);
-//  }
 
   protected ChromeDriver startChromeDriver(int waitInSeconds) {
     ChromeOptions options = Allure.step("ChromeOptions", step -> {
@@ -134,6 +112,16 @@ public class BaseTest {
       step.parameter("Driver", driver.toString());
     });
     return (ChromeDriver) driver;
+  }
+
+  protected FirefoxDriver startFirefoxDriver() {
+    return startFirefoxDriver(new FirefoxOptions());
+  }
+
+  protected FirefoxDriver startFirefoxDriver(FirefoxOptions options) {
+    options.setImplicitWaitTimeout(Duration.ofSeconds(1));
+    driver = new FirefoxDriver(options);
+    return (FirefoxDriver) driver;
   }
 
 //  protected static ChromeOptions getDefaultChromeOptions() {
@@ -201,46 +189,5 @@ public class BaseTest {
 //      throw new RuntimeException(e);
 //    }
 //  }
-
-//  protected void takeScreenshotAllure(String name) {
-//    byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-//    Allure.addAttachment(name, new ByteArrayInputStream(screenshot));
-//  }
-
-
-//  protected CompletableFuture<String> takeScreenshot(WebDriver driver, String fileName) {
-//    return CompletableFuture.supplyAsync(() -> {
-//      try {
-//        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        TakesScreenshot screenshot = (TakesScreenshot) driver;
-//        File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
-//        File destFile = new File("./" + fileName + "_" + timestamp + ".png");
-//        FileHandler.copy(sourceFile, destFile);
-//        System.out.println("Screenshot saved: " + destFile.getAbsolutePath());
-//      }
-//      catch (IOException e) {
-//        System.out.println("Failed to save screenshot: " + e.getMessage());
-//      }
-//      return "ScreenshotCompleted";
-//    });
-//  }
-//
-//  protected CompletableFuture<String> takeScreenshotElement(WebElement element) {
-//    return CompletableFuture.supplyAsync(() -> {
-//      String img = null;
-//      try {
-//        img = element.getScreenshotAs(OutputType.BASE64);
-//        File sourceFile = element.getScreenshotAs(OutputType.FILE);
-//        File destFile = new File(element.toString() + "_screenshot.png");
-//        FileHandler.copy(sourceFile, destFile);
-//      }
-//      catch (IOException e) {
-//        System.out.println("Failed to save screenshot: " + e.getMessage());
-//      }
-//      return img;
-//    });
-//  }
-
-
 
 }

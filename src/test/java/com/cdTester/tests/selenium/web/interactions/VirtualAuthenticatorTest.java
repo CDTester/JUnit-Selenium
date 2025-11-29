@@ -49,7 +49,6 @@ public class VirtualAuthenticatorTest extends BaseTest {
     });
   }
 
-
   @Test
   @Tag("smoke")
   @Story("Story: virtual authenticator options")
