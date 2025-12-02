@@ -8,10 +8,10 @@ import org.openqa.selenium.support.PageFactory;
 
 public class SingleTextInput {
   WebDriver driver;
+  public static final String title = "BasicKeyboardInterfaceTest";
 
   @FindBy(id = "textInput")
   public WebElement textInput;
-
 
   public SingleTextInput(WebDriver driver) {
     this.driver = driver;

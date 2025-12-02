@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class Dynamic {
   WebDriver driver;
+  public static final String title = "Window title";
 
   @FindBy(id = "adder")
   public WebElement addAboxButton;
