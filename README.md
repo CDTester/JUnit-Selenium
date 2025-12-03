@@ -1,5 +1,12 @@
 # Selenium UI Framework on JUnit framework
 
+[![Test Status](https://github.com/CDTester/JUnit-Selenium/actions/workflows/selenium.yml/badge.svg)](https://github.com/CDTester/JUnit-Selenium/actions/workflows/selenium.yml)
+[![Test Report](https://github.com/CDTester/JUnit-Selenium/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/CDTester/JUnit-Selenium/actions/workflows/pages/pages-build-deployment)
+
+## Latest Build Report
+https://cdtester.github.io/JUnit-Selenium/
+
+
 ## Installation
 Add Selenium to your [POM file](pom.xml) 
 Then compile and run the project with:

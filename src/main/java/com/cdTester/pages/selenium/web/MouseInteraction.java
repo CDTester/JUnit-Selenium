@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class MouseInteraction {
   WebDriver driver;
+  public static final String title = "BasicMouseInterfaceTest";
 
   @FindBy(id = "click")
   public WebElement clickLink;

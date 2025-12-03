@@ -33,7 +33,8 @@ public class KeysTest extends BaseTest {
       step.parameter("URL", url.singleTextInput);
       driver.get(url.singleTextInput);
       String title=driver.getTitle();
-      step.parameter(SingleTextInput.title, title);
+      step.parameter("title", title);
+      assertEquals(SingleTextInput.title, title);
     });
     keysPage = new SingleTextInput(driver);
     Allure.step("WHEN the text input box is visible", step -> {
