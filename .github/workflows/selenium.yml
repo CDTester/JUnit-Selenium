@@ -14,31 +14,38 @@
       runs-on: ubuntu-latest
       steps:
         # Checkout code
-        - name: Checkout code
+        - name: 📥 Checkout code
           uses: actions/checkout@v5
+
         # Set Up JDK 21
-        - name: Set up JDK 21
+        - name: ☕ Set up JDK 21
           uses: actions/setup-java@v5
           with:
             java-version: '21.0.5'
             distribution: 'temurin'
             cache: 'maven'
+
         # Build with Maven, skipping tests
-        - name: Build with Maven
+        - name: 🔨 Build with Maven
           run: mvn clean install -DskipTests
+
         # get allure history
-        - name: Download Allure report history
+        - name: 📚 Download Allure report history
           uses: actions/checkout@v5
           if: always()
           continue-on-error: true
           with:
             ref: gh-pages
             path: gh-pages
+
         # Run Selenium tests
-        - name: run Selenium smoke tests
+        - name: 🧪 run Selenium smoke tests
+          id: tests
           run: mvn clean test -Denv=prod -Dgroups=smoke
+          continue-on-error: true
+
         # Generate Allure Report
-        - name: Build Allure Report
+        - name: 📊 Build Allure Report
           uses: simple-elf/allure-report-action@v1.13
           if: always()
           with:
@@ -46,8 +53,9 @@
             allure_history: allure-history
             allure_results: target/allure-results
             keep_reports: true
+
         # Publish test reports
-        - name: Publish test report
+        - name: 🚀 Publish test report
           uses: peaceiris/actions-gh-pages@v3
           if: always()
           with:
@@ -55,19 +63,21 @@
             publish_branch: gh-pages
             publish_dir: allure-history
 
-        # old way to upload artifacts
-        #- name: Archive test reports
-        #  if: always()
-        #  uses: actions/upload-artifact@v4
-        #  with:
-        #    name: test-reports
-        #    path: |
-        #      target/allure*
-        #      target/site/
-        #- name: Publish Allure report
-        #  uses: peaceiris/actions-gh-pages@v4
-        #  if: always()
-        #  with:
-        #    github_token: ${{ secrets.GITHUB_TOKEN }}
-        #    publish_branch: master
-        #    publish_dir: allure-history
+        # Add report to summary
+        - name: 📝 Add report link to summary
+          if: always()
+          run: |
+            echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+            echo "📊 [View Allure Report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)" >> $GITHUB_STEP_SUMMARY
+            if [ "${{ steps.tests.outcome }}" == "success" ]; then
+            echo "✅ All tests passed!" >> $GITHUB_STEP_SUMMARY
+            else
+            echo "❌ Some tests failed. Check the report for details." >> $GITHUB_STEP_SUMMARY
+            fi
+
+        # Fail the workflow if tests failed
+        - name: 💥 Check test results
+          if: steps.tests.outcome == 'failure'
+          run: |
+            echo "❌ Tests failed!"
+            exit 1

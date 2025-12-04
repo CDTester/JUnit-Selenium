@@ -9,6 +9,7 @@ import java.io.File;
 
 public class Upload {
   WebDriver driver;
+  public static final String title = "The Internet";
 
   @FindBy(css = "input[type=file]")
   WebElement chooseFileButton;
@@ -18,6 +19,9 @@ public class Upload {
 
   @FindBy(id = "file-submit")
   WebElement uploadButton;
+
+  @FindBy(tagName = "h3")
+  WebElement heading;
 
   public Upload(WebDriver driver) {
     this.driver = driver;
@@ -33,4 +37,9 @@ public class Upload {
   public String getUploadedFile() {
     return fileUploaded.getText();
   }
+
+  public String getHeading() {
+    return heading.getText();
+  }
+
 }

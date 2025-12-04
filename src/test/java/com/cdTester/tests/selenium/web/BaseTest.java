@@ -20,7 +20,7 @@ public class BaseTest {
   protected WebDriver driver;
   protected WebDriverWait wait;
   protected static String browser;
-  protected String trustStorePassword = "seleniumkeystore";
+//  protected String trustStorePassword = "seleniumkeystore";
   protected static ConfigManager config;
 
   @BeforeAll
@@ -62,15 +62,14 @@ public class BaseTest {
     }
   }
 
-
-  protected WebDriver startBrowserDriver() {
-    if (browser.equalsIgnoreCase("firefox")) {
-      return startFirefoxDriver();
-    }
-    else {
-      return startChromeDriver(1);
-    }
-  }
+//  protected WebDriver startBrowserDriver() {
+//    if (browser.equalsIgnoreCase("firefox")) {
+//      return startFirefoxDriver();
+//    }
+//    else {
+//      return startChromeDriver(1);
+//    }
+//  }
 
   protected ChromeDriver startChromeDriver(int waitInSeconds) {
     ChromeOptions options = Allure.step("ChromeOptions", step -> {

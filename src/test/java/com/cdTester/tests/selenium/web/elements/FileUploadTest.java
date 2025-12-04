@@ -4,36 +4,57 @@ import com.cdTester.pages.Urls;
 import com.cdTester.pages.theInternetHerokuapp.Upload;
 import com.cdTester.tests.selenium.web.BaseTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import com.cdTester.utils.TestResultListener;
+import io.qameta.allure.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@Epic("Epic: Working with file uploads")
+@Feature("Feature: Upload File Tests")
+@Tag("uploadFile")
+@ExtendWith(TestResultListener.class)
 public class FileUploadTest extends BaseTest {
-
+  protected Upload uploadPage;
   protected String filePath = "src/test/resources/";
   protected String fileName = "selenium-snapshot.png";
 
   @Test
   @Tag("regression")
-  @DisplayName("Should be able to Upload a fileName")
+  @Story("Story: Upload Files")
+  @TmsLink("TC-031")
+  @DisplayName("Should be able to Upload a png file")
   public void fileUploadTest() {
-    Urls url = new Urls(BaseTest.config, "selenium");
-    driver = startChromeDriver(1);
-    driver.get(url.upload);
-    Upload uploadPage = new Upload(driver);
+    Urls url = new Urls(BaseTest.config, "herokuapp");
+    Allure.step("GIVEN ChromeDriver has been initiated", step -> {
+      driver = startChromeDriver(1);
+    });
+    Allure.step("AND the web page has loaded", step -> {
+      step.parameter("URL", url.upload);
+      driver.get(url.upload);
+      String title=driver.getTitle();
+      step.parameter("title", title);
+      assertEquals(Upload.title, title);
+    });
+    uploadPage = new Upload(driver);
 
-    /* The following is replaced by Page Object Model
-     *    File uploadFile = new File(filePath + fileName);
-     *    WebElement fileInput = driver.findElement(By.cssSelector("input[type=fileName]"));
-     *    fileInput.sendKeys(uploadFile.getAbsolutePath());
-     *    driver.findElement(By.id("fileName-submit")).click();
-    */
-    uploadPage.uploadFile(filePath, fileName);
-
-
-    /* The following is replaced by Page Object Model
-     *    WebElement fileName = driver.findElement(By.id("uploaded-files"));
-    */
-    assertEquals(fileName, uploadPage.getUploadedFile());
+    Allure.step("WHEN a png file is uploaded to a file path", step -> {
+      step.parameter("file name: ", fileName);
+      step.parameter("file path: ", filePath);
+      /* The following is replaced by Page Object Model
+       *    File uploadFile = new File(filePath + fileName);
+       *    WebElement fileInput = driver.findElement(By.cssSelector("input[type=fileName]"));
+       *    fileInput.sendKeys(uploadFile.getAbsolutePath());
+       *    driver.findElement(By.id("fileName-submit")).click();
+       */
+      uploadPage.uploadFile(filePath, fileName);
+    });
+    Allure.step("THEN the heading 'File Uploaded!' will be displayed", step -> {
+      step.parameter("Heading:", uploadPage.getHeading());
+      assertEquals("File Uploaded!", uploadPage.getHeading());
+    });
+    Allure.step("THEN the message '" + fileName + "' will be displayed", step -> {
+      step.parameter("file name:", uploadPage.getUploadedFile());
+      assertEquals(fileName, uploadPage.getUploadedFile());
+    });
   }
 }
