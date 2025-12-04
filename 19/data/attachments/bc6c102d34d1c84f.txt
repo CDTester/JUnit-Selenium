@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to select options from a single select list
