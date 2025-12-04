@@ -46,8 +46,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -140,22 +138,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>3.5.3</version>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <showSuccess>true</showSuccess>
-                    <alwaysGenerateSurefireReport>true</alwaysGenerateSurefireReport>
-                    <outputName>Selenium ${groups} Tests</outputName>
-                    <reportsDirectories>
-                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                    </reportsDirectories>
-                </configuration>
+                <executions><execution><phase>test</phase><goals><goal>report</goal></goals></execution></executions>
+                <configuration><showSuccess>true</showSuccess><alwaysGenerateSurefireReport>true</alwaysGenerateSurefireReport><outputName>Selenium ${groups} Tests</outputName><reportsDirectories><reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory></reportsDirectories></configuration>
             </plugin>-->
             <!-- Allure Maven Plugin -->
             <plugin>

@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class Inputs {
   WebDriver driver;
+  public static final String title = "inputs";
 
   @FindBy(tagName = "h1")
   public WebElement header1;
@@ -24,8 +25,10 @@ public class Inputs {
   @FindBy(name = "email_input")
   public WebElement emailInput;
 
-//  @FindBy(name = "password_input")
-//  WebElement passwordInput;
+
+  @FindBy(name = "password_input")
+  public WebElement passwordInput;
+  public final String passwordTagName = "input";
 
 //  @FindBy(name = "search_input")
 //  WebElement searchInput;
@@ -54,8 +57,8 @@ public class Inputs {
 //  @FindBy(name = "datetime_input")
 //  WebElement dateTimeInput;
 
-//  @FindBy(name = "datetime_local_input")
-//  WebElement dateTimeLocalInput;
+  @FindBy(name = "datetime_local_input")
+  public WebElement dateTimeLocalInput;
 
 //  @FindBy(name = "time_input")
 //  WebElement timeInput;
@@ -97,4 +100,10 @@ public class Inputs {
     Highlight.highlightElement(this.driver, element);
     return element;
   }
+
+  public WebElement unhighlightElement(WebElement element) throws InterruptedException {
+    Highlight.unhighlightElement(this.driver, element);
+    return element;
+  }
+
 }
