@@ -1,0 +1,2 @@
+Switching to iFrame: iframeWithAlert
+✅ Test PASSED: Should be able to click a link in an iframe that triggers an alert
