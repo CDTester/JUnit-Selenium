@@ -1,0 +1,3 @@
+❌ Test FAILED: Should be able to Upload a png file
+Reason: expected: <The Internet> but was: <Application Error>
+📸 Taking screenshot for failed test...
