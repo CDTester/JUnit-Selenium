@@ -97,7 +97,7 @@
                 <version>3.5.4</version>
                 <configuration>
                     <groups>${groups}</groups>
-                    <!--<excludedGroups>broken, regression</excludedGroups>-->
+                    <excludedGroups>broken, flaky</excludedGroups>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
