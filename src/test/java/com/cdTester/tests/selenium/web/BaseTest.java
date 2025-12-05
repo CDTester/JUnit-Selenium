@@ -8,6 +8,7 @@ import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -107,7 +108,7 @@ public class BaseTest {
   protected ChromeDriver startChromeDriver(ChromeOptions options) {
     Allure.step("Starting ChromeDriver", step -> {
       driver = new ChromeDriver(options);
-      driver.manage().window().maximize();
+      driver.manage().window().setSize(new Dimension(1200, 800));
       step.parameter("Driver", driver.toString());
     });
     return (ChromeDriver) driver;

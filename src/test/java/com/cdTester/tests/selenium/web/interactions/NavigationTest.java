@@ -82,7 +82,8 @@ public class NavigationTest extends BaseTest{
 
     Allure.step("AND the page is navigated to a new URL", step -> {
       Menu menu = new Menu(driver);
-      step.parameter("Navigate using menu link", menu.documentationLink.getText());
+      step.parameter("window width:", this.driver.manage().window().getSize().getWidth());
+      step.parameter("window height:", this.driver.manage().window().getSize().getHeight());
       menu.clickMenuLink(menu.documentationLink);
       step.parameter("Title", driver.getTitle());
       assertEquals("The Selenium Browser Automation Project | Selenium", driver.getTitle());
@@ -116,7 +117,8 @@ public class NavigationTest extends BaseTest{
 
     Allure.step("AND the page is navigated to a new URL", step -> {
       Menu menu = new Menu(driver);
-      step.parameter("Navigate using menu link", menu.documentationLink.getText());
+      step.parameter("window width:", this.driver.manage().window().getSize().getWidth());
+      step.parameter("window height:", this.driver.manage().window().getSize().getHeight());
       menu.clickMenuLink(menu.documentationLink);
       step.parameter("Title", driver.getTitle());
       assertEquals("The Selenium Browser Automation Project | Selenium", driver.getTitle());

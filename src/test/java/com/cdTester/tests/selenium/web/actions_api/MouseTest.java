@@ -289,7 +289,7 @@ public class MouseTest extends BaseTest {
     Allure.step("WHEN the mouse is moved to a location using Sequence", step -> {
       step.parameter("Sequence(PointerInput, 0)", "where PointerInput(PointerInput.Kind.MOUSE, \"default mouse\")");
       step.parameter(".addAction(", "PointerInput.createPointerMove(");
-      step.parameter("", "Duration.ZERO, PointerInput.Origin.viewport(), 70, 500");
+      step.parameter("", "Duration.ZERO, PointerInput.Origin.viewport(), 70, 100");
       step.parameter("", ")");
       step.parameter(")", "");
       PointerInput mouse = new PointerInput(PointerInput.Kind.MOUSE, "default mouse");
