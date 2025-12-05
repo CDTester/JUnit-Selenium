@@ -32,6 +32,10 @@ public class FileUploadTest extends BaseTest {
       step.parameter("URL", url.upload);
       driver.get(url.upload);
       String title=driver.getTitle();
+      if (!title.equals(Upload.title)) {
+        driver.navigate().refresh();
+        title=driver.getTitle();
+      }
       step.parameter("title", title);
       assertEquals(Upload.title, title);
     });
