@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to clear the text from an input field

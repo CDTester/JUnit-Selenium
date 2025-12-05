@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to hold SHIFT key down whilst sending keys using Actions

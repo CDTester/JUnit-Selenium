@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to print current page using PrintsPage interface

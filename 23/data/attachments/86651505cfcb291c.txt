@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to enter text into multiple prompts and accept them
