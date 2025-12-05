@@ -79,6 +79,7 @@ public class BaseTest {
       option.addArguments("disable-search-engine-choice-screen");
       if (config.getEnv().equals("prod")) {
         option.addArguments("--headless=new");
+        option.addArguments("--window-size=1200,800");
       }
       step.parameter("Options", option.toString());
       return option;
@@ -98,6 +99,7 @@ public class BaseTest {
       }
       if (config.getEnv().equals("prod")) {
         option.addArguments("--headless=new");
+        option.addArguments("--window-size=1200,800");
       }
       step.parameter("Options", option.toString());
       return option;
