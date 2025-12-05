@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to accept a confirmation alert that redirects to another URL

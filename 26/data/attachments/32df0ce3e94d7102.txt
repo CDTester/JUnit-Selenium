@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able set page paper size

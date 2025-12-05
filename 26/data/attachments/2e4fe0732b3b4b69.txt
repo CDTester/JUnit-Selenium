@@ -1,0 +1,3 @@
+❌ Test FAILED: Should be able to move mouse pointer to an absolute location using Pointer and Sequence API
+Reason: message does not match the action performed ==> expected: <70, 219> but was: <70, 211>
+📸 Taking screenshot for failed test...
