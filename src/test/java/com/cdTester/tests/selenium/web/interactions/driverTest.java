@@ -43,7 +43,7 @@ public class driverTest extends BaseTest {
     Allure.step("THEN the browser title should be 'Selenium'", step -> {
       String title = driver.getTitle();
       step.parameter("Page Title", title);
-      Assertions.assertEquals("Helenium", title, "Page title is not as expected");
+      Assertions.assertEquals("Selenium", title, "Page title is not as expected");
     });
   }
 

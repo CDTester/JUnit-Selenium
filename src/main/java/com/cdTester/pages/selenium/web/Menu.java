@@ -12,7 +12,7 @@ public class Menu {
   @FindBy(id = "main_navbar")
   public WebElement mainMenuBar;
 
-  @FindBy(css = "[data-bs-target='#main_navbar']")
+  @FindBy(xpath = "//button[@class='navbar-toggler']")
   public WebElement smallMenuBar;
 
   @FindBy(linkText = "About")
@@ -55,7 +55,7 @@ public class Menu {
 
   public String getMenuType() {
     int width = this.driver.manage().window().getSize().getWidth();
-    if (width < 990) {
+    if (width <= 991) {
       return "small";
     }
     else {
@@ -64,7 +64,7 @@ public class Menu {
   }
 
   public void clickMenuLink(WebElement linkName) {
-    if (getMenuType() == "small") {
+    if (getMenuType().equals("small")) {
       if (!this.mainMenuBar.isDisplayed()) {
         this.smallMenuBar.click();
       }

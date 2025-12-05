@@ -81,7 +81,7 @@ public class TablesTest extends BaseTest {
       assert(tablesPage.countryTable.isDisplayed());
     });
     Allure.step("WHEN the 'Continent' header is found in a table without a <thead>", step -> {
-      colNumberTbody.set(tablesPage.getColumnNumberByHeader(tablesPage.countryTable, "InContinent"));
+      colNumberTbody.set(tablesPage.getColumnNumberByHeader(tablesPage.countryTable, "Continent"));
       step.parameter("column index:", colNumberTbody.get());
     });
     Allure.step("THEN the column index should be 3", step -> {
@@ -113,9 +113,8 @@ public class TablesTest extends BaseTest {
       colNumberTbody.set(element);
     });
     Allure.step("THEN the column index should be 5", step -> {
-      // should be 5, example to show assertion error
       step.parameter("column index:", colNumberTbody.get());
-      assertEquals(4, colNumberTbody.get());
+      assertEquals(5, colNumberTbody.get());
     });
   }
 

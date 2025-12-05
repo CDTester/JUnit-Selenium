@@ -295,14 +295,14 @@ public class MouseTest extends BaseTest {
       PointerInput mouse = new PointerInput(PointerInput.Kind.MOUSE, "default mouse");
       Sequence actions = new Sequence(mouse, 0)
            .addAction(mouse.createPointerMove(
-                 Duration.ZERO, PointerInput.Origin.viewport(), 70, 500
+                 Duration.ZERO, PointerInput.Origin.viewport(), 70, 100
                  )
            );
       ((RemoteWebDriver) driver).perform(Collections.singletonList(actions));
     });
-    Allure.step("THEN the text '70, 500' is displayed", step -> {
+    Allure.step("THEN the text '70, 100' is displayed", step -> {
       step.parameter("text:", absolute.getText());
-      assertEquals("70, 500", absolute.getText(), "message does not match the action performed");
+      assertEquals("70, 100", absolute.getText(), "message does not match the action performed");
     });
   }
 
