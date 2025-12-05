@@ -61,6 +61,7 @@ what the tests are actually doing and does not provide any test evidence.
 | @Test              | The annotation declares a class/method as a test.                               |                                        |
 | @DisplayName       | Declares a custom display name for the test class/method.                       | ("Test Name")                          |
 | @Tag               | Adds a tag to a test which can be used to filter tests during execution cycles. | ("Tag Name")                           |
+| @ExtendWith        | allows you to extend the class with another class                               | ("className.class")                    |
 | @Disabled          | This annotation declares the class/method as a parameterised test               |                                        |
 | @ParameterizedTest | Marks a method as supplying data for a test method.                             |                                        |
 | @valueSource       | Specifies a String array as the source of arguments for the @ParameterizedTest  | (strings = { "value1", "value2" })     |
@@ -94,11 +95,8 @@ In the navigation menu, go to Run > Edit Configurations.
 - Click on "Edit configuration templates" and select "JUnit".
 - Set the following fields: VM options: -Denv=dev
 - Apply the changes and close the dialog.
-- Click on the "+" icon to add a new configuration and select "JUnit". Set up a config like this:
-
+- Click on the "+" icon to add a new configuration and select "JUnit". Set up a config like this:<br>
 ![JUnit Run Configuration](docs/junit_run_config.png)
-
-
 
 
 ## Configuration Management
@@ -125,15 +123,109 @@ tables.base.url=file://
 ```
 
 ## Maven Surefire Test Reporter 
-The Maven Surefire report collates data the JUnit xml test report file. The report is basic and only shows the summary of the results and test titles.
-
+The Maven Surefire report collates data the JUnit xml test report file. The report is basic and only shows the summary of the results and test titles.<br>
 ![Surefire report](docs/surefire_report.png)
 
 ## Allure Test Reporter
 The Allure Reporter is a rich report that provides functionality for test steps. 
 
-The next step for this repo is to add Allure reporter.
+### Allure Annotations
+| Annotation   | Description                                                                                    | Paramaters                |
+|--------------|------------------------------------------------------------------------------------------------|---------------------------|
+| @Epic        | Needed for creating `Behaviors` section of report.                                             | ("Epic title")            |
+| @Feature     | Needed for creating `Behaviors` section of report.                                             | ("Feature title")         |
+| @Story       | Needed for creating `Behaviors` section of report.                                             | ("Story title")           |
+| @TmsLink     | Test Management System test link. Used in conjunction with allure.properties.                  | ("Story identifier")      |
+| @Issue       | Bug assigned to the test. Used in conjunction with allure.properties.                          | ("Bug identifier")        |
+| @Title       | Test title. Does the same as JUnit @DisplayName.                                               | ("Test title")            |
+| @Description | Test description. I have not used this as the Gherkin language I have used describes the test. | ("Test description")      |
+| @Severity    | Describes how import the test is (BLOCKER, CRITICAL, NORMAL, MINOR, TRIVIAL)                   | ("SeverityLevel.BLOCKER") |
+| @Owner       | The name of the test creator.                                                                  | ("Owners name")           |
 
+
+### Allure resource files
+In `src/test/resources` there are 3 files that enrich the details on the allure report.
+- `allure.properties` contains 3 properties: a base url for @story, a base url for @bug and a directory for the results to go.
+- `categories.json` contains custom test failure categories.
+- `environment.properties` This file is dynamically created by BaseTest.setEnvironmentInfo(). It collects the current test
+environment name, browser, headless state, java version, OS, User and test date.
+
+
+### Allure steps
+JUnit does not provide test steps which are extremely useful to show what each test is doing, what stage of the test fails and 
+provide the reader of the report some test evidence of what each step has done.
+Allure does this via the `Allure.step` function. There are 3 methods to add a step:
+- As a no-op call e.g. `Allure.step("step description");` which does not provide you with any of the above-mentioned benefits.
+- As reusable functions e.g. `@step("step description") void fnName(inputs) {}`. Functions are best used to carrying out specific
+actions and not for validating results. Also, you are stuck with the step description.
+- As lambda functions. e.g `Allure.step("step.description", step -> {});`. This is my preferred method, as you can name the 
+description anything that is relevant to the step, you can call a function to carry out a task and then assert within that step.
+
+The last 2 methods provide a time duration on the report for that step and a status for that step.
+
+### Allure step parameters
+Inside the step, it is useful to include step parameters that provide information to what the step is doing.<br>
+```java
+public class test {
+  public void clickTest() {
+    Allure.step("AND the 'Clickable' input field is visible", step -> {
+        mousePage.highlightElement(clickable);
+        step.parameter("id:", clickable.getAttribute("id"));
+        step.parameter("isDisplayed()", clickable.isDisplayed());
+        assertTrue(clickable.isDisplayed());
+    });
+  }
+}
+```
+![step parameters](docs/allure_step_parameters.png)
+
+
+### Allure attachments
+Attachments can help the report reader investigate unexpected test failures.<br> 
+This is done with `Allure.addAttachment(name, attachmentType, ByteArrayInputStream(), fileExtension)`.<br>
+The function to add attachments in allure.step() can be found in [TestResultListener](src/test/java/com/cdTester/utils/TestResultListener.java)
+
+
+### TestResultListener
+This class has a number of methods to override existing JUnit TestWatcher methods so that we can add features like taking screenshots and closing drivers.
+
+
+### Allure history
+Allure provides a way to compare the test results against previous test runs. To set this up, you need to set up some steps in 
+you github actions workflow YML.<br>
+[selenium.yml](.github/workflows/selenium.yml)
+
+
+### Report: Overview
+The overview will show the overall staus of the test including:
+- Number of tests executed with percentage of test status
+- Environment details. e.g. environment, browser, java version, OS, etc
+- Trend. This shows the history of the test executed with their status.
+- Categories. This shows the overall amount of test failure categories. 
+- Suites. Overview of the status of tests executed in suites (classes).
+- Features by stories. Overview of the status of test executed by @Epics
+
+### Report: Categories
+This section of the report groups failed tests by categories. The 2 main categories are either 
+
+#### Product defects
+These test failures are due to assertion failures.<br>
+![Product defect](docs/allure_categories_product.png)
+
+Step attachment.<br>
+![Step attachement](docs/allure_categories_product_attachments.png)
+
+#### Test defects
+These test failures are due to issues in the test code.
+![Test defect](docs/allure_categories_test.png)
+
+
+### Report: Behaviors
+This section of the report groups tests by Epics, Features and Stories. <br>
+![Behavior](docs/allure_behavior_steps.png)
+
+
+### Allure report generation
 ```bash
 # Generate report and open report, machine is used as a server to host the report
 mvn allure:serve
@@ -158,6 +250,7 @@ The issue is that assertion errors do not show the expected and actual values in
 But when `mvn allure:report` is used the values are displauyed:
 ![Mvn Allure exception error shows values](docs/mvn_allure_no_issue.png)
 
+### 
 
 ## Selenium 
 ### import drivers

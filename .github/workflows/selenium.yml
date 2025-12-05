@@ -41,7 +41,7 @@
         # Run Selenium tests
         - name: 🧪 run Selenium smoke tests
           id: tests
-          run: mvn clean test -Denv=prod -Dgroups=smoke
+          run: mvn clean test -Denv=prod -DexcludeGroups=flaky
           continue-on-error: true
 
         # Generate Allure Report

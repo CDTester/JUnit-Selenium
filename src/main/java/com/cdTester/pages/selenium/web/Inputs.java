@@ -16,8 +16,8 @@ public class Inputs {
 //  @FindBy(name = "no_type")
 //  WebElement noTypeInput;
 
-//  @FindBy(name = "number_input")
-//  WebElement numberInput;
+  @FindBy(name = "number_input")
+  public WebElement numberInput;
 
   @FindBy(name = "range_input")
   public WebElement rangeInput;
@@ -36,8 +36,8 @@ public class Inputs {
 //  @FindBy(name = "tel_input")
 //  WebElement telephoneInput;
 
-//  @FindBy(name = "text_input")
-//  WebElement textInput;
+  @FindBy(name = "text_input")
+  public WebElement textInput;
 
 //  @FindBy(name = "url_input")
 //  WebElement urlInput;
@@ -45,8 +45,11 @@ public class Inputs {
   @FindBy(name = "checkbox_input")
   public WebElement checkboxInput;
 
-//  @FindBy(name = "radio_input")
-//  WebElement radioInput;
+  @FindBy(xpath = "//input[@value='radio1']")
+  public WebElement radioInput1;
+
+  @FindBy(xpath = "//input[@value='radio2']")
+  public WebElement radioInput2;
 
   @FindBy(name = "color_input")
   public WebElement colourInput;

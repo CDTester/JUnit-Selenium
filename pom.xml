@@ -17,7 +17,7 @@
         <allure.version>2.25.0</allure.version>
         <aspectj.version>1.9.21</aspectj.version>
         <junit.version>6.0.0</junit.version>
-        <groups>smoke | build</groups>
+        <groups>smoke | regression</groups>
     </properties>
 
     <repositories>
