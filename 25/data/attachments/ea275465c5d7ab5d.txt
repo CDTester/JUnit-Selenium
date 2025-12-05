@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to navigate forward using the navigate().forward() method

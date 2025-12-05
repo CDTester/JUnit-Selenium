@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to Upload a png file

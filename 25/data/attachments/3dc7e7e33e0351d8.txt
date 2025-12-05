@@ -1,0 +1,1 @@
+✅ Test PASSED: Checkbox input should be checked

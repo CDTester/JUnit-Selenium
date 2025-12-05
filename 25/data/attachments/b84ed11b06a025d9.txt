@@ -1,0 +1,1 @@
+✅ Test PASSED: Should fail to find box without waits

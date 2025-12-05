@@ -1,0 +1,1 @@
+✅ Test PASSED: Should not be able to read the default text in a prompt

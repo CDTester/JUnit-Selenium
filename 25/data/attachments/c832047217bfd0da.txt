@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to add a non-resident credential when setHasUserVerification=false
