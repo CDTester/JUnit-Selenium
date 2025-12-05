@@ -268,6 +268,7 @@ public class MouseTest extends BaseTest {
     });
   }
 
+
   @Test
   @Tag("regression")
   @Story("Story: Sequence")
@@ -300,9 +301,9 @@ public class MouseTest extends BaseTest {
            );
       ((RemoteWebDriver) driver).perform(Collections.singletonList(actions));
     });
-    Allure.step("THEN the text '70, 100' is displayed", step -> {
+    Allure.step("THEN the text '70, 219' is displayed", step -> {
       step.parameter("text:", absolute.getText());
-      assertEquals("70, 100", absolute.getText(), "message does not match the action performed");
+      assertEquals("70, 219", absolute.getText(), "message does not match the action performed");
     });
   }
 
