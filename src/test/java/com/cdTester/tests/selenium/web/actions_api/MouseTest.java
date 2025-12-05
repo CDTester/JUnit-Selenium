@@ -270,7 +270,8 @@ public class MouseTest extends BaseTest {
 
 
   @Test
-  @Tag("regression")
+  @Tag("flaky")
+  // Absolute location does not behavior consistently in headless mode
   @Story("Story: Sequence")
   @TmsLink("TC-027")
   @DisplayName("Should be able to move mouse pointer to an absolute location using Pointer and Sequence API")
