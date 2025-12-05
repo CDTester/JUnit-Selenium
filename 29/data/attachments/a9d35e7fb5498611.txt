@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to remove a non-resident credential

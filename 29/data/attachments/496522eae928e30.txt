@@ -1,0 +1,1 @@
+✅ Test PASSED: Get row number by cell value that repeats in other rows

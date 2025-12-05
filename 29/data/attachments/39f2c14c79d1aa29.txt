@@ -1,0 +1,2 @@
+true
+✅ Test PASSED: Should be able to send keys to a focused element using Actions

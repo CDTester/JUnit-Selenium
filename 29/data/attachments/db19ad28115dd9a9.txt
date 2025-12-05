@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to create a virtual authenticator using U2F protocol

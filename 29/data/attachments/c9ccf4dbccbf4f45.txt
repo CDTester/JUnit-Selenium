@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to left click an element using Actions

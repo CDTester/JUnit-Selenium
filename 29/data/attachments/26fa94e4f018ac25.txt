@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to create an alert with an option to cancel using JavaScriptExecutor
