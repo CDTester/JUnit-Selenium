@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to move mouse pointer to a relative location using Actions API

@@ -1,0 +1,3 @@
+❌ Test FAILED: Get column number by header name in a table without a <thead>
+Reason: NoSuchElementException: column header not found for InContinent
+📸 Taking screenshot for failed test...

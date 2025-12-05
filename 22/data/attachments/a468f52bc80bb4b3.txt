@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to switch to a new tab using newWindow

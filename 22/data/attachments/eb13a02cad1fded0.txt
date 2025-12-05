@@ -1,0 +1,1 @@
+✅ Test PASSED: Should switch to iFrame using index

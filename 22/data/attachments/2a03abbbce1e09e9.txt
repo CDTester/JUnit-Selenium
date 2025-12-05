@@ -1,0 +1,3 @@
+❌ Test FAILED: Get column number by header name in a table with <thead>
+Reason: expected: <4> but was: <5>
+📸 Taking screenshot for failed test...
