@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to navigate back using the navigate().back() method

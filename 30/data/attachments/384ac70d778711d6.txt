@@ -1,0 +1,1 @@
+✅ Test PASSED: Should be able to find box using implicit wait

@@ -1,0 +1,1 @@
+✅ Test PASSED: Get column number by header name in a table without a <thead>
